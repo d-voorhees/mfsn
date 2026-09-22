@@ -1,0 +1,136 @@
+---
+// Desktop dropdowns open on hover/focus via CSS alone (see .dropdown:hover
+// > .dropdown-menu etc. in site.css). The mobile drilldown panel needs
+// actual state (which panel is open) that can't be expressed in CSS, so it
+// uses the small vanilla-JS behavior in /mobile-menu.js instead of a
+// framework island — a handful of classList toggles doesn't justify
+// hydrating a component.
+import { urlFor } from '../../lib/sanity';
+import { resolveHref, isExternal } from '../../lib/link';
+import type { NavigationItemData, SanityImage } from '../../types/sanity';
+
+interface Props {
+  navigation: NavigationItemData[];
+  logo: SanityImage;
+  siteName: string;
+}
+
+const { navigation, logo, siteName } = Astro.props;
+
+// Mobile panel IDs are position-based ("panel-1", "panel-2", ...) rather
+// than derived from each item's label, so they stay stable even if an
+// editor renames a nav group. site.css currently has transform rules for
+// panel-1 and panel-2 (the source site's 2 dropdown groups); a 3rd
+// dropdown group would need a matching CSS rule added.
+const dropdownGroups = navigation.filter((item) => item.dropdownItems && item.dropdownItems.length > 0);
+const panelId = (item: NavigationItemData) => `panel-${dropdownGroups.indexOf(item) + 1}`;
+const logoUrl = urlFor(logo).width(84).height(84).url();
+---
+
+<nav class="navbar-custom">
+  <div class="d-flex justify-content-between align-items-center">
+    <a href="/" class="brand">
+      <img src={logoUrl} alt={logo.alt} class="brand-logo" />
+      <span>{siteName}</span>
+    </a>
+    <div class="nav-right">
+      <div class="nav-links">
+        {navigation.map((item) =>
+          item.dropdownItems && item.dropdownItems.length > 0 ? (
+            <div class="dropdown">
+              <a href="#" class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                {item.label} <span class="caret">&#9662;</span>
+              </a>
+              <ul class="dropdown-menu">
+                {item.dropdownItems.map((child) => (
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href={resolveHref(child.link)}
+                      target={isExternal(child.link) ? '_blank' : undefined}
+                      rel={isExternal(child.link) ? 'noopener' : undefined}
+                    >
+                      {child.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : (
+            <a
+              href={resolveHref(item.link)}
+              target={isExternal(item.link) ? '_blank' : undefined}
+              rel={isExternal(item.link) ? 'noopener' : undefined}
+            >
+              {item.label}
+            </a>
+          ),
+        )}
+        <a href="/search/" class="nav-search" aria-label="Search"><i class="bi bi-search"></i></a>
+      </div>
+      <div class="translate-anchor">
+        <div class="gtranslate_wrapper"></div>
+      </div>
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <i class="ph ph-dots-three-circle"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+<div class="mobile-menu" id="mobileMenu" data-active-panel="root" aria-hidden="true">
+  <div class="mobile-menu-header">
+    <a href="/" class="mobile-menu-brand">
+      <img src={logoUrl} alt={logo.alt} class="mobile-menu-logo" />
+      <span>{siteName}</span>
+    </a>
+    <button class="mobile-menu-close" id="mobileMenuClose" type="button" aria-label="Close menu">
+      <i class="ph ph-x"></i>
+    </button>
+  </div>
+  <div class="mobile-menu-panels">
+    <div class="mobile-menu-panel" data-panel="root">
+      <ul class="mobile-menu-list">
+        {navigation.map((item) => (
+          <li>
+            {item.dropdownItems && item.dropdownItems.length > 0 ? (
+              <button class="mobile-menu-drill" data-target={panelId(item)} type="button">
+                <span>{item.label}</span>
+                <i class="ph ph-arrow-right"></i>
+              </button>
+            ) : (
+              <a
+                href={resolveHref(item.link)}
+                target={isExternal(item.link) ? '_blank' : undefined}
+                rel={isExternal(item.link) ? 'noopener' : undefined}
+              >
+                {item.label}
+              </a>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+    {dropdownGroups.map((item) => (
+      <div class="mobile-menu-panel" data-panel={panelId(item)}>
+        <button class="mobile-menu-back" type="button">
+          <i class="ph ph-arrow-left"></i> <span>{item.label}</span>
+        </button>
+        <ul class="mobile-menu-list">
+          {item.dropdownItems!.map((child) => (
+            <li>
+              <a
+                href={resolveHref(child.link)}
+                target={isExternal(child.link) ? '_blank' : undefined}
+                rel={isExternal(child.link) ? 'noopener' : undefined}
+              >
+                {child.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</div>

@@ -1,0 +1,51 @@
+---
+import { urlFor } from '../../lib/sanity';
+import type { TeamGridBlock } from '../../types/sanity';
+
+interface Props {
+  block: TeamGridBlock;
+}
+
+const { block } = Astro.props;
+---
+
+{block.display === 'cards' ? (
+  <section class="support-section">
+    <div class="container">
+      <div class="row justify-content-center g-5">
+        {block.people.map((person) => (
+          <div class="col-md-6 col-lg-5 team-member">
+            {person.photo && <img src={urlFor(person.photo).width(400).url()} alt={person.photo.alt} class="team-photo" />}
+            <h3 class="team-name">{person.name}</h3>
+            {person.role && <p class="team-role">{person.role}</p>}
+            {person.email && <p class="team-email">{person.email}</p>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+) : (
+  <section class="members-section">
+    <div class="container">
+      <div class="row g-5 align-items-center">
+        <div class="col-md-6">
+          {block.heading && <h2 class="members-heading">{block.heading}</h2>}
+          {block.intro && <p class="members-intro">{block.intro}</p>}
+          {block.introImage && (
+            <img src={urlFor(block.introImage).width(700).url()} alt={block.introImage.alt} class="members-photo" />
+          )}
+        </div>
+        <div class="col-md-6">
+          <ul class="members-list">
+            {block.people.map((person) => (
+              <li>
+                <span class="member-name">{person.name}</span>
+                {person.role && <>, <span class="member-org">{person.role}</span></>}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+)}

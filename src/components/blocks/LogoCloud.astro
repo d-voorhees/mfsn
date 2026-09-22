@@ -1,0 +1,52 @@
+---
+import { urlFor } from '../../lib/sanity';
+import type { LogoCloudBlock } from '../../types/sanity';
+
+interface Props {
+  block: LogoCloudBlock;
+}
+
+const { block } = Astro.props;
+---
+
+{block.display === 'fullCards' ? (
+  <section class="partners-section">
+    <div class="container">
+      {block.heading && <div class="partner-count">{block.heading}</div>}
+      <div class="partner-grid">
+        {block.partners.map((partner) =>
+          partner.url ? (
+            <a class="partner-card" href={partner.url} target="_blank" rel="noopener">
+              <div class={`partner-logo-wrap${partner.logoOnDarkBg ? ' dark' : ''}`}>
+                {partner.logo && <img src={urlFor(partner.logo).width(300).url()} alt={`${partner.name} logo`} loading="lazy" />}
+              </div>
+              <span class="partner-name">{partner.name}</span>
+            </a>
+          ) : (
+            <div class="partner-card no-link">
+              <div class={`partner-logo-wrap${partner.logoOnDarkBg ? ' dark' : ''}`}>
+                {partner.logo && <img src={urlFor(partner.logo).width(300).url()} alt={`${partner.name} logo`} loading="lazy" />}
+              </div>
+              <span class="partner-name">{partner.name}</span>
+            </div>
+          )
+        )}
+      </div>
+    </div>
+  </section>
+) : (
+  <section class="partners-section bg-gray">
+    <div class="container">
+      {block.heading && <h2 class="partners-heading">{block.heading}</h2>}
+      <div class="partner-logos">
+        {block.partners.map((partner) =>
+          partner.url ? (
+            <a class="partner-logo-chip" href={partner.url} target="_blank" rel="noopener">{partner.name}</a>
+          ) : (
+            <span class="partner-logo-chip">{partner.name}</span>
+          )
+        )}
+      </div>
+    </div>
+  </section>
+)}

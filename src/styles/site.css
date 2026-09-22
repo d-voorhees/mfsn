@@ -1,0 +1,2156 @@
+/* =====================================================================
+   Manatee Network — single site stylesheet
+   All rules are global (no body.page-* scoping) for consistent styling
+   across every page. Sections below are grouped by the page a class
+   originated on, purely for organization — the classes themselves apply
+   site-wide wherever they're used.
+   ===================================================================== */
+
+:root {
+  --text-dark: #202124;
+  --text-body: #3c4043;
+  --border-light: #dadce0;
+  --footer-bg: #f1f3f4;
+  --site-footer-bg: #000000;
+  --site-footer-text: #e8eaed;
+  --accent-gold: #b9812e;
+  --accent-gold-dark: #96692a;
+  --logo-pink: #ec008c;
+  --logo-green: #b2d235;
+  --logo-orange: #f9a01b;
+  --logo-blue: #5c7a87;
+  /* Path updated from the source's ../img/ (relative to assets/site.css)
+     to a public-root-absolute path, since this stylesheet now lives at
+     src/styles/site.css and the icon is served as a static public/ asset. */
+  --bullet-icon: url('/img/manatee-orange.png');
+}
+body {
+  font-family: 'Open Sans', sans-serif;
+  color: var(--text-body);
+  font-size: 15px;
+  line-height: 1.6;
+}
+h1, h2, h3, h4, h5, h6, .display-font {
+  font-family: 'Metropolis', sans-serif;
+  color: var(--text-dark);
+  font-weight: 800;
+}
+.h1, .h2, .h3, .h4, .h5, .h6,
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 800 !important;
+}
+a, button {
+  font-family: 'Metropolis', sans-serif;
+  font-weight: 800;
+}
+h2 {
+  font-size: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ================= Navbar ================= */
+.navbar-custom {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 1rem 2rem;
+  background: transparent;
+}
+.navbar-custom .brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: white;
+  text-decoration: none;
+  font-family: 'Metropolis', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+.brand-logo { width: 42px; height: 42px; object-fit: contain; }
+.navbar-custom .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+.navbar-custom .nav-links a {
+  color: white;
+  text-decoration: none;
+  font-family: 'Metropolis', sans-serif;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.navbar-custom .nav-links a:hover { opacity: 0.85; }
+.caret { font-size: 0.65rem; display: inline-block; margin-left: 2px; }
+
+/* Nav dropdowns (global — was previously scoped only to body.page-index) */
+.navbar-custom .dropdown-toggle::after { display: none; }
+
+.navbar-custom .nav-links .dropdown-menu {
+  background: #ffffff;
+  border: none;
+  border-radius: 0;
+  padding: 0.85rem 1.25rem;
+  min-width: 270px;
+  margin-top: 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-custom .nav-links .dropdown-menu .dropdown-item {
+  color: #1c1c1c;
+  background: transparent;
+  padding: 0.4rem 0;
+  font-size: 0.85rem;
+  font-family: 'Open Sans', sans-serif;
+  white-space: normal;
+}
+
+.navbar-custom .nav-links .dropdown-menu .dropdown-item:hover,
+.navbar-custom .nav-links .dropdown-menu .dropdown-item:focus {
+  background: transparent;
+  color: #1c1c1c;
+  opacity: 0.65;
+}
+
+/* Show on hover (and keyboard focus) instead of requiring a click */
+.navbar-custom .nav-links .dropdown > .dropdown-menu {
+  display: block;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+.navbar-custom .nav-links .dropdown:hover > .dropdown-menu,
+.navbar-custom .nav-links .dropdown:focus-within > .dropdown-menu,
+.navbar-custom .nav-links .dropdown > .dropdown-menu.show {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.navbar-custom .nav-search i { color: white; font-size: 1.1rem; }
+.navbar-custom .nav-search:hover { opacity: 0.85; }
+
+/* ================= Language switcher (GTranslate) ================= */
+.gtranslate_wrapper {
+  display: flex;
+  align-items: center;
+}
+.translate-anchor {
+  position: relative;
+}
+.translate-anchor .gtranslate_wrapper {
+  position: relative;
+}
+/* !important needed: GTranslate injects its own CSS via JS after this stylesheet loads */
+.gt_float_switcher {
+  font-size: 12px !important;
+  line-height: 14px !important;
+  overflow: visible !important;
+}
+.gt_float_switcher img {
+  width: 16px !important;
+  height: auto !important;
+  margin: 0 4px 0 0 !important;
+}
+.gt_float_switcher .gt-selected .gt-current-lang {
+  padding: 4px 8px !important;
+}
+.gt_float_switcher .gt-selected .gt-current-lang span.gt_float_switcher-arrow {
+  height: 14px !important;
+  width: 10px !important;
+  background-size: 8px !important;
+}
+/* GTranslate's own CSS makes the options list position: relative, which pushes it into
+   normal document flow and shoves the navbar taller when opened. Force it to float instead. */
+.gt_float_switcher .gt_options {
+  position: absolute !important;
+  top: 100% !important;
+  right: 0 !important;
+  left: auto !important;
+  margin-top: 4px !important;
+  background: #fff !important;
+  box-shadow: rgba(0, 0, 0, 0.15) 0 5px 15px !important;
+  border-radius: 2px !important;
+}
+.gt_float_switcher .gt_options a {
+  padding: 6px 10px !important;
+  font-size: 13px !important;
+}
+
+/* ================= Hero (default, non-home pages) ================= */
+.hero {
+  position: relative;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-bg-img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+}
+.hero-overlay {
+  position: absolute; inset: 0; background: rgba(140, 95, 50, 0.55);
+}
+.hero-title-box {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  border: 3px solid white;
+  padding: 2rem 5rem;
+  margin-top: 2rem;
+}
+.hero-title-box h1 {
+  color: white;
+  font-size: 4rem;
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+.map-embed {
+  width: 100%;
+  margin: 1.5rem 0;
+}
+.map-embed iframe {
+  display: block;
+  width: 100%;
+  height: 500px;
+  border: 0;
+}
+.hero-title-box .hero-subtitle {
+  color: white;
+  font-family: 'Metropolis', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0.5rem 0 0;
+  letter-spacing: 0.5px;
+}
+
+/* ================= Footer ================= */
+footer {
+  background: var(--site-footer-bg);
+  padding: 1.5rem 1rem;
+  font-size: 0.85rem;
+  color: var(--site-footer-text);
+}
+.footer-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+.footer-logo {
+  height: 65px;
+  width: auto;
+  flex-shrink: 0;
+}
+.footer-text {
+  text-align: right;
+}
+footer .contact-line {
+  margin-bottom: 0.75rem;
+}
+footer a {
+  color: var(--site-footer-text);
+  text-decoration: none;
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+}
+footer a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+  .footer-text {
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title-box { padding: 1.25rem 2rem; }
+  .hero-title-box h1 { font-size: 2.25rem; }
+  .hero-title-box .hero-subtitle { font-size: 1.1rem; }
+}
+
+@media (max-width: 1024px) {
+  .navbar-custom .nav-links { display: none; }
+}
+
+/* ================= Mobile menu (shared across all pages) ================= */
+.navbar-custom .nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+}
+
+.mobile-menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  padding: 0;
+  color: white;
+  font-size: 30px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.mobile-menu-toggle:hover { opacity: 0.85; }
+
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(32, 33, 36, 0.55);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1050;
+}
+
+.mobile-menu-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  background: white;
+  z-index: 1060;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+}
+
+.mobile-menu.is-open { transform: translateX(0); }
+
+.mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1.25rem 1.25rem 1rem;
+  border: 1px solid var(--border-light, #dadce0);
+  flex-shrink: 0;
+}
+
+.mobile-menu-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-decoration: none;
+  color: var(--text-dark, #202124);
+  font-family: 'Metropolis', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.mobile-menu-logo { width: 34px; height: 34px; object-fit: contain; flex-shrink: 0; }
+
+.mobile-menu-close {
+  background: none;
+  border: none;
+  font-size: 30px;
+  color: var(--text-dark, #202124);
+  padding: 0.25rem;
+  line-height: 1;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.mobile-menu-close:hover { opacity: 0.7; }
+
+.mobile-menu-panels {
+  position: relative;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  width: 300%;
+  transform: translateX(0);
+  transition: transform 0.3s ease;
+}
+
+.mobile-menu-panel {
+  width: 33.3333%;
+  flex-shrink: 0;
+  overflow-y: auto;
+  padding: 0.5rem 0 1.5rem;
+}
+
+.mobile-menu-panels i.ph {
+  font-size: 18px;
+}
+
+/* Renamed from the source's label-matched selectors (our-network/our-strategy)
+   to position-based panel IDs, since the panel list is now driven by
+   Sanity's `navigation` array rather than hardcoded per-label markup. Pure
+   identifier rename — the transform values and visual behavior are
+   unchanged. Supports exactly the 2 dropdown groups the source site has;
+   a 3rd would need a panel-3 rule added here. */
+.mobile-menu[data-active-panel="panel-1"] .mobile-menu-panels { transform: translateX(-33.3333%); }
+.mobile-menu[data-active-panel="panel-2"] .mobile-menu-panels { transform: translateX(-66.6667%); }
+
+.mobile-menu-list { list-style: none; margin: 0; padding: 0; }
+
+.mobile-menu-list li { border-bottom: none; }
+
+.mobile-menu-list a,
+.mobile-menu-drill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 0.95rem 1.25rem;
+  font-family: 'Metropolis', sans-serif;
+  font-size: 1rem;
+  color: var(--text-dark, #202124);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mobile-menu-list a:hover,
+.mobile-menu-drill:hover { background: var(--bg-light, #f1f3f4); }
+
+.mobile-menu-drill i { font-size: 1.1rem; color: var(--accent-gold, #c8933d); flex-shrink: 0; margin-left: 0.75rem; }
+
+.mobile-menu-back {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  background: var(--bg-light, #f1f3f4);
+  border: none;
+  border-bottom: 1px solid var(--border-light, #dadce0);
+  padding: 0.95rem 1.25rem;
+  font-family: 'Metropolis', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-dark, #202124);
+  cursor: pointer;
+  margin-bottom: 0.25rem;
+}
+
+.mobile-menu-back i { font-size: 1.1rem; color: var(--accent-gold, #c8933d); flex-shrink: 0; }
+
+.mobile-menu-list a.is-current { color: var(--accent-gold-dark, #a9772c); font-weight: 800; }
+
+body.mobile-menu-open { overflow: hidden; }
+
+@media (max-width: 1024px) {
+  .mobile-menu-toggle { display: inline-flex; align-items: center; flex-shrink: 0; }
+  .navbar-custom .nav-right { gap: 0.6rem; flex-shrink: 0; }
+  .navbar-custom .d-flex { flex-wrap: nowrap; }
+  .navbar-custom .brand { min-width: 0; flex: 1 1 auto; font-size: 16px; overflow: hidden; }
+  .navbar-custom .brand span {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .translate-anchor { transform: scale(0.8); transform-origin: center right; }
+}
+
+@media (min-width: 1025px) {
+  .mobile-menu-overlay,
+  .mobile-menu { display: none !important; }
+}
+
+/* ================= Utilities ================= */
+.bg-gray {
+  background: var(--bg-light, #f1f3f4);
+}
+
+/* ================= Shared components ================= */
+/* Gold pill CTA button — used on member-connection, our-strategy, unite-us, find-food-now */
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--accent-gold);
+  color: #fff;
+  font-weight: 800;
+  font-family: 'Metropolis', sans-serif;
+  font-size: 1rem;
+  padding: 0.5rem 1.4rem;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 3px 10px rgba(185, 129, 46, 0.35);
+  transition: all 0.2s ease;
+  appearance: none;
+  cursor: pointer;
+}
+
+.btn-cta:hover {
+  background: var(--accent-gold-dark);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(185, 129, 46, 0.4);
+}
+
+.btn-cta::after {
+  content: "→";
+  transition: transform 0.2s ease;
+}
+
+.btn-cta:hover::after {
+  transform: translateX(3px);
+}
+
+/* ================= In the News (shared — used on homepage and In the News page) ================= */
+.news-section { background: #fff; }
+
+.news-section h2 { text-align: left; margin-bottom: 3rem; }
+
+.news-col {
+  height: 100%;
+}
+
+.news-logo {
+  height: 32px;
+  margin-bottom: 0.9rem;
+  display: flex;
+  align-items: center;
+}
+
+.news-logo img {
+  max-height: 100%;
+  max-width: 140px;
+  width: auto;
+  object-fit: contain;
+}
+
+.news-headline { font-size: 1.15rem; margin-bottom: 1rem; line-height: 1.35; }
+
+.news-byline { font-style: italic; font-size: 0.9rem; color: var(--text-body); margin-bottom: 1rem; }
+
+.news-col p { font-size: 0.92rem; margin-bottom: 1rem; }
+
+.news-link { font-weight: 800; text-decoration: none; color: #000; }
+
+.news-link:hover { color: var(--accent-gold-dark); }
+
+.news-citation { display: block; font-size: 0.8rem; color: var(--text-body); margin: 0 0 0.4rem; }
+
+.news-more-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 2.5rem;
+}
+
+/* ================= Legal pages (Terms of Service, Privacy Policy) ================= */
+.legal-content h2 {
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.legal-content h2:first-of-type {
+  margin-top: 0;
+}
+
+/* =====================================================================
+   PAGE: Home (index.html)
+   ===================================================================== */
+:root {
+  --text-dark: #000000;
+  --text-body: #000000;
+  --bg-light: #f1f3f4;
+  --accent-gold: #c8933d;
+  --accent-gold-dark: #a9772c;
+  --accent-gold-bg: #d5ac6a;
+}
+
+/* Hero (homepage — kept separate from the shared .hero used on other pages) */
+
+.home-hero {
+  position: relative;
+  min-height: 640px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 1.5rem 3rem;
+  box-sizing: border-box;
+}
+
+.home-hero-title-box {
+  border: 3px solid white;
+  padding: 2rem 3.5rem;
+  margin: 0 auto;
+  display: inline-block;
+}
+
+.home-hero-title-box h1 {
+  color: white;
+}
+
+a {
+  color: inherit;
+}
+
+.btn-cta {
+  color: #fff;
+}
+
+section {
+  scroll-margin-top: 90px;
+  padding: 5em 0;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 780px;
+  padding: 0 1.5rem;
+  text-align: center;
+}
+
+.hero-description {
+  color: white;
+  font-size: 1.1rem;
+  margin-top: 1.75rem;
+  line-height: 1.7;
+}
+
+.hero-ctas {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-cta-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  gap: 0.5rem;
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  font-weight: 800;
+  font-family: 'Metropolis', sans-serif;
+  font-size: 1rem;
+  padding: 0.5rem 1.4rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-cta-outline:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
+}
+
+.btn-cta-outline::after {
+  content: "→";
+  transition: transform 0.2s ease;
+}
+
+.btn-cta-outline:hover::after {
+  transform: translateX(3px);
+}
+
+/* Outline CTA for use on light backgrounds — matches .resource-link's gold
+   outline treatment, sized to match .btn-cta buttons */
+.btn-cta-outline-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  gap: 0.5rem;
+  background: #fff;
+  color: var(--accent-gold-dark);
+  border: 2px solid var(--accent-gold);
+  font-weight: 800;
+  font-family: 'Metropolis', sans-serif;
+  font-size: 1rem;
+  padding: 0.85rem 1.9rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.btn-cta-outline-gold:hover {
+  background: var(--accent-gold);
+  color: #fff;
+  border-color: var(--accent-gold);
+}
+
+/* Section 2: Why the Network Exists */
+
+.network-intro-logo {
+  width: 100%;
+  max-width: 300px;
+  display: block;
+  margin: 0 auto;
+}
+
+.network-intro-copy p {
+  margin-bottom: 1rem;
+}
+
+/* Section 3: Our Vision */
+
+.vision-section {
+  background: var(--bg-light);
+  text-align: center;
+}
+
+.vision-quote {
+  font-size: 1.2rem;
+  color: var(--text-dark);
+  max-width: 780px;
+  margin: 0 auto;
+  font-family: 'Metropolis', sans-serif;
+  font-weight: 800;
+}
+
+/* Section 4: Why Food Matters */
+
+.matters-section {
+  background: var(--accent-gold-bg);
+}
+
+h2.matters-heading.pr-5 {
+  font-size: 3.5em;
+}
+
+.matters-facts {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.matters-facts li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 1.1rem;
+  font-size: 1.02rem;
+  color: var(--text-dark);
+}
+
+.matters-facts li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.35em;
+  width: 0.8em;
+  height: 0.8em;
+  background: var(--bullet-icon) center / contain no-repeat;
+}
+
+/* Section 5: Strategic Pillars */
+
+.pillars-section {
+  background: var(--bg-light);
+}
+
+.pillar-card {
+  border-radius: 4px;
+  border: 2.5px solid var(--pillar-color, var(--accent-gold));
+  background: color-mix(in srgb, var(--pillar-color, var(--accent-gold)) 12%, #fff);
+  color: #000;
+  padding: 2rem 1.5rem;
+  height: 100%;
+}
+
+.pillar-icon {
+  font-size: 1.8rem;
+  color: #000;
+  margin-bottom: 1rem;
+}
+
+.pillar-icon i.ph {
+  font-size: 80px;
+}
+
+.pillar-card p {
+  font-size: 0.95rem;
+  margin-bottom: 1.25rem;
+}
+
+.pillars-cta {
+  text-align: right;
+  margin-top: 1.5rem;
+}
+
+.pillars-cta a {
+  font-size: 0.9rem;
+  font-style: italic;
+  text-decoration: underline;
+  font-weight: 800;
+  color: #000;
+}
+
+/* Section 6: How We Work */
+
+.how-we-work-section {
+  background: var(--bg-light);
+}
+
+.work-step {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.work-step-number {
+  font-family: 'Metropolis', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: var(--step-color, var(--accent-gold));
+  line-height: 1;
+  flex-shrink: 0;
+  width: 3.5rem;
+}
+
+.work-step p {
+  margin: 0;
+}
+
+/* Section 7: Resource Highlights */
+
+.resources-photo {
+  width: 100%;
+  height: 100%;
+  min-height: 320px;
+  object-fit: cover;
+  display: block;
+}
+
+.resources-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.75rem;
+}
+
+.resources-list li {
+  padding-left: 1.25rem;
+  position: relative;
+  margin-bottom: 0.85rem;
+}
+
+.resources-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  width: 0.75em;
+  height: 0.75em;
+  background: var(--bullet-icon) center / contain no-repeat;
+}
+
+.resources-list strong {
+  color: var(--text-dark);
+}
+
+/* Section 8: Partner Pathways */
+
+.partner-section {
+  background: var(--accent-gold-bg);
+}
+
+.partner-heading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 3rem;
+}
+
+.partner-heading img {
+  width: 60px;
+  height: auto;
+}
+
+.partner-col {
+  text-align: center;
+  padding: 0 1rem;
+  margin-bottom: 2rem;
+}
+
+.partner-col .partner-quote {
+  font-style: italic;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  margin-bottom: 0.75rem;
+}
+
+.partner-col p {
+  font-size: 0.92rem;
+}
+
+.partner-col a.partner-cta {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-weight: 800;
+  text-decoration: underline;
+  color: var(--text-dark);
+}
+
+.partner-directory {
+  text-align: center;
+  border: 1px solid rgba(32,33,36,0.25);
+  border-radius: 6px;
+  padding: 1.75rem 1.5rem;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  background: #e9ecef94;
+}
+
+.partner-directory a {
+  text-decoration: underline;
+  font-weight: 800;
+  margin: 0 0.35rem;
+}
+
+/* Section 9: At a Glance */
+
+.stats-section {
+  text-align: center;
+}
+
+#at-a-glance, #usf-data-mapping {
+  background: var(--bg-light);
+}
+
+#alice-in-manatee-county {
+  background: var(--bg-light);
+}
+
+.alice-graphic {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.stat-number {
+  font-family: 'Metropolis', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+  line-height: 1;
+}
+
+.stat-number.stat-green {
+  color: var(--logo-green);
+}
+
+.stat-number.stat-orange {
+  color: var(--logo-orange);
+}
+
+.stat-number.stat-pink {
+  color: var(--logo-pink);
+}
+
+.stat-number.stat-blue {
+  color: var(--logo-blue);
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  color: var(--text-body);
+}
+
+.stat-link {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 400;
+  font-style: italic;
+  margin-top: 0.4rem;
+  text-decoration: none;
+  color: black;
+}
+
+.stat-link:hover {
+  text-decoration: underline;
+}
+
+.stats-note {
+  max-width: 720px;
+  margin: 2.5rem auto 0;
+  font-size: 0.92rem;
+  color: var(--text-body);
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 1.75rem 1.5rem;
+}
+
+/* Navigator Pilot Program spotlight */
+
+.navigator-spotlight {
+  max-width: 1000px;
+  margin: 3.5rem auto 0;
+  padding: 3rem 1.75rem;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  text-align: left;
+}
+
+.section-eyelash {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent-gold-dark);
+  margin-bottom: 0.6rem;
+}
+
+.navigator-subtitle {
+  font-style: italic;
+  color: var(--text-body);
+  margin-bottom: 2rem;
+}
+
+.navigator-intro {
+  color: var(--text-body);
+  margin-bottom: 1.25rem;
+  max-width: 800px;
+}
+
+.navigator-spotlight.no-border {
+  margin-top: 0;
+  padding: 0;
+  border: none;
+}
+
+.navigator-stat-band {
+  background: var(--bg-light);
+  border: 1px solid var(--border-light);
+  padding: 1.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.navigator-stat-band .stat-number {
+  font-size: 2.4rem;
+}
+
+.navigator-stat-band .stat-label {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.navigator-caveat {
+  font-size: 0.85rem;
+  color: var(--text-body);
+  margin-bottom: 2.5rem;
+}
+
+.navigator-outcomes ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 2.5rem;
+}
+
+.navigator-outcomes > div > ul > li {
+  position: relative;
+  padding-left: 1.25rem;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+}
+
+.navigator-outcomes > div > ul > li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  width: 0.75em;
+  height: 0.75em;
+  background: var(--bullet-icon) center / contain no-repeat;
+}
+
+.navigator-outcomes ul ul {
+  margin: 0.5rem 0 0;
+}
+
+.navigator-outcomes ul ul li {
+  position: relative;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+  padding-left: 1.1rem;
+}
+
+.navigator-outcomes ul ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  width: 0.65em;
+  height: 0.65em;
+  background: var(--bullet-icon) center / contain no-repeat;
+}
+
+.navigator-callout {
+  border: 1px solid var(--callout-color, var(--accent-gold));
+  background: var(--callout-bg, #faf5ea);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.92rem;
+  text-align: left;
+}
+
+.navigator-callout .callout-label {
+  font-weight: 700;
+  color: var(--callout-color, var(--accent-gold-dark));
+  letter-spacing: 0.3px;
+}
+
+.navigator-callout--blue {
+  --callout-color: var(--logo-blue);
+  --callout-bg: #eaf1f4;
+}
+
+.navigator-callout--green {
+  --callout-color: var(--logo-green);
+  --callout-bg: #f1f7e6;
+}
+
+/* Section 10: Documents and Updates */
+
+.docs-section {
+  background: #fff;
+}
+
+.agenda-widget__status {
+  color: var(--text-body);
+  font-style: italic;
+}
+
+.agenda-widget__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.1rem;
+  padding: 1.1rem 1rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+}
+
+.agenda-widget__item:last-child {
+  margin-bottom: 0;
+}
+
+.agenda-widget__date {
+  flex: 0 0 56px;
+  text-align: center;
+}
+
+.agenda-widget__month {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-gold-dark);
+}
+
+.agenda-widget__day {
+  display: block;
+  font-family: 'Metropolis', sans-serif;
+  font-weight: 800;
+  font-size: 1.6rem;
+  line-height: 1.1;
+  color: var(--text-dark);
+}
+
+.agenda-widget__body {
+  flex: 1;
+}
+
+.agenda-widget__title {
+  margin: 0 0 0.2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.agenda-widget__meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-body);
+}
+
+.updates-signup-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.updates-signup-form input {
+  border: 1px solid var(--border-light);
+  padding: 0.55rem 0.85rem;
+  flex: 1;
+  min-width: 180px;
+  height: 49px;
+  border-radius: 5px;
+}
+
+.btn-signup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--accent-gold);
+  color: #fff;
+  font-weight: 800;
+  font-family: 'Metropolis', sans-serif;
+  font-size: 1rem;
+  padding: 0.65rem 1.9rem;
+  border: 2px solid transparent;
+  border-radius: 999px;
+  text-decoration: none;
+  box-shadow: 0 3px 10px rgba(185, 129, 46, 0.35);
+  transition: all 0.2s ease;
+  appearance: none;
+  cursor: pointer;
+}
+
+.btn-signup:hover {
+  background: var(--accent-gold-dark);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(185, 129, 46, 0.4);
+}
+
+.btn-signup::after {
+  content: "→";
+  transition: transform 0.2s ease;
+}
+
+.btn-signup:hover::after {
+  transform: translateX(3px);
+}
+
+/* Section 11: Find Food Now */
+
+.find-food-section {
+  background: var(--bg-light);
+}
+
+.find-food-list {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.find-food-list li {
+  margin-bottom: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .home-hero {
+    min-height: 0;
+    padding: 6.5rem 1.25rem 3rem;
+  }
+
+  .home-hero-title-box {
+    padding: 1.25rem 1.75rem;
+  }
+
+  .home-hero-title-box h1 {
+    font-size: 2rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .matters-heading {
+    text-align: left;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .network-intro-copy h2 {
+    margin-top: 1.5rem;
+  }
+}
+
+/* =====================================================================
+   PAGE: Leadership (leadership.html)
+   ===================================================================== */
+.team-member {
+  text-align: center;
+}
+
+.team-photo {
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  margin: 0 auto 1.25rem;
+  display: block;
+}
+
+.team-role {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-body);
+  margin-bottom: 0.25rem;
+}
+
+.team-email {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--text-body);
+  word-break: break-word;
+}
+
+@media (max-width: 768px) {
+  .team-member {
+    margin-bottom: 2.5rem;
+  }
+}
+
+/* =====================================================================
+   PAGE: Meeting Documents (meeting-documents.html)
+   ===================================================================== */
+.docs-photo {
+  width: 100%;
+  border-radius: 6px;
+  display: block;
+}
+
+.docs-info p {
+  margin-bottom: 1.75rem;
+}
+
+.year-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.year-links a {
+  font-family: 'Metropolis', sans-serif;
+  font-weight: 800;
+  font-size: 1.3rem;
+  color: var(--accent-gold-dark);
+  text-decoration: none;
+  width: fit-content;
+  padding: 0.15rem 0.6rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  transition: border-color 0.15s ease;
+}
+
+.year-links a:hover {
+  border-color: var(--accent-gold-dark);
+}
+
+@media (max-width: 768px) {
+  .docs-photo {
+    margin-bottom: 2rem;
+  }
+}
+
+/* =====================================================================
+   PAGE: Member Connection (member-connection.html)
+   ===================================================================== */
+.connection-join-row {
+  margin-top: 3rem;
+}
+
+.hylo-intro-logo {
+  height: 72px;
+  width: auto;
+  margin-bottom: 1.5rem;
+}
+
+.connection-info p {
+  margin-bottom: 1.25rem;
+}
+
+.connection-info ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.connection-info li {
+  position: relative;
+  padding-left: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.connection-info li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  width: 0.8em;
+  height: 0.8em;
+  background: var(--bullet-icon) center / contain no-repeat;
+}
+
+.hylo-card {
+  background: var(--footer-bg);
+  border-radius: 8px;
+  padding: 2.5rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hylo-wordmark {
+  font-family: 'Metropolis', sans-serif;
+  font-weight: 800;
+  font-size: 1.6rem;
+  color: var(--text-dark);
+  margin-bottom: 0.75rem;
+}
+
+.hylo-card p {
+  max-width: 320px;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .hylo-card {
+    margin-top: 2.5rem;
+  }
+}
+
+/* =====================================================================
+   PAGE: Our Network (our-network.html)
+   ===================================================================== */
+/* Intro */
+
+.network-intro {
+  text-align: center;
+}
+
+.network-intro p {
+  max-width: 760px;
+  margin: 0 auto;
+  font-size: 1.05rem;
+}
+
+/* Partner grid */
+
+.partner-count {
+  text-align: center;
+  color: var(--text-body);
+  font-size: 0.9rem;
+  margin-bottom: 2.5rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.partner-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1.1rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.partner-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  padding: 1.25rem 1rem 1.15rem;
+  text-decoration: none;
+  color: var(--text-dark);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+}
+
+a.partner-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-color: var(--accent-gold);
+  transform: translateY(-2px);
+}
+
+.partner-card.no-link {
+  cursor: default;
+}
+
+.partner-logo-wrap {
+  width: 100%;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.85rem;
+}
+
+.partner-logo-wrap img {
+  max-width: 100%;
+  max-height: 84px;
+  object-fit: contain;
+}
+
+.partner-logo-wrap.dark {
+  background: var(--text-dark);
+  border-radius: 6px;
+  padding: 0.5rem;
+  height: 84px;
+  box-sizing: border-box;
+}
+
+.partner-logo-wrap.dark img {
+  max-height: 68px;
+}
+
+.partner-logo-wrap.placeholder {
+  background: var(--bg-light, #f4f1ea);
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.partner-logo-wrap.placeholder span {
+  font-family: 'Metropolis', sans-serif;
+  font-size: 1.5rem;
+  color: var(--accent-gold-dark);
+  font-weight: 800;
+}
+
+.partner-name {
+  text-align: center;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  color: var(--text-dark);
+}
+
+@media (max-width: 768px) {
+  .partner-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+  }
+
+  .partner-card {
+    padding: 1rem 0.6rem 0.9rem;
+  }
+}
+
+/* =====================================================================
+   PAGE: Our Strategy (our-strategy.html)
+   ===================================================================== */
+:root {
+  --pillar-green: #b2d235;
+  --pillar-pink: #ec008c;
+  --pillar-blue: #5c7a87;
+  --pillar-orange: #f9a01b;
+}
+
+/* Four-Pronged Strategy */
+
+.pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 3rem;
+}
+
+.pillar-card .pillar-num {
+  font-family: 'Metropolis', sans-serif;
+  font-weight: 800;
+  font-size: 1.75rem;
+  color: var(--pillar-color);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.pillar-card.c1 {
+  --pillar-color: var(--pillar-green);
+}
+
+.pillar-card.c2 {
+  --pillar-color: var(--pillar-pink);
+}
+
+.pillar-card.c3 {
+  --pillar-color: var(--pillar-blue);
+}
+
+.pillar-card.c4 {
+  --pillar-color: var(--pillar-orange);
+}
+
+/* Focus section */
+
+.quote-section {
+  background-color: #f2f2f2;
+  padding: 3rem 0;
+}
+
+.pull-quote {
+  font-family: 'Metropolis', sans-serif;
+  font-weight: 800;
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--text-dark);
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.pull-quote cite {
+  display: block;
+  font-family: 'Open Sans', sans-serif;
+  font-style: normal;
+  font-size: 0.9rem;
+  color: var(--text-body);
+  margin-top: 0.75rem;
+}
+
+.focus-photo {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+.photo-collage {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.photo-collage img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.focus-col ol, .focus-col ul {
+  padding-left: 1.2rem;
+  margin-bottom: 0;
+}
+
+.focus-col li {
+  margin-bottom: 0.4rem;
+}
+
+.partnership-note {
+  margin-top: 1.75rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.partnership-note + .btn-cta {
+  margin-top: 1rem;
+}
+
+@media (max-width: 992px) {
+  .pillar-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .pillar-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .focus-heading {
+    font-size: 1.8rem;
+  }
+
+  .focus-col {
+    margin-bottom: 2.5rem;
+  }
+}
+
+/* =====================================================================
+   PAGE: Resources (resources.html)
+   ===================================================================== */
+.intro-section p {
+  max-width: 900px;
+  font-size: 1rem;
+}
+
+/* Resource rows */
+
+.resource-row {
+  border: 1px solid var(--border-light);
+}
+
+.resource-row:first-of-type {
+  border: none;
+}
+
+.resource-media img {
+  width: 100%;
+  border-radius: 6px;
+  display: block;
+}
+
+.resource-media.is-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fafafa;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  padding: 1.5rem;
+  min-height: 220px;
+}
+
+.resource-media.is-logo img {
+  max-height: 190px;
+  width: auto;
+  max-width: 100%;
+  border-radius: 0;
+}
+
+.resource-content ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0.75rem;
+}
+
+.resource-content li {
+  position: relative;
+  padding-left: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.resource-content li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  width: 0.8em;
+  height: 0.8em;
+  background: var(--bullet-icon) center / contain no-repeat;
+}
+
+.resource-content .source-note {
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--text-body);
+  margin-top: 0.75rem;
+}
+
+.lang-divider {
+  border: 1px dashed var(--border-light);
+  margin: 1.25rem 0;
+}
+
+/* Resource link chips — replaces the repeated full-width gold buttons */
+
+.resource-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+}
+
+.resource-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold-dark);
+  background: #fff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.resource-link:hover {
+  background: var(--accent-gold);
+  color: #fff;
+  border-color: var(--accent-gold);
+}
+
+.resource-link::after {
+  content: "↗";
+  font-size: 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .resource-media {
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Eyelash tags — small labels above each resource title, plus the master list */
+
+.master-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  max-width: 900px;
+}
+
+.master-tag-list .tag-pill {
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.15s ease;
+}
+
+.master-tag-list .tag-pill:hover {
+  transform: translateY(-2px);
+}
+
+.resource-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--accent-gold);
+  color: #000;
+  background: #fff8ec;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.75rem .2rem;
+  border-radius: 999px;
+  line-height: .72rem;
+}
+
+.tag-pill:nth-of-type(4n+1) {
+  border-color: var(--logo-blue);
+  color: #000;
+  background: color-mix(in srgb, var(--logo-blue) 12%, #fff);
+}
+
+.tag-pill:nth-of-type(4n+2) {
+  border-color: var(--logo-orange);
+  color: #000;
+  background: color-mix(in srgb, var(--logo-orange) 12%, #fff);
+}
+
+.tag-pill:nth-of-type(4n+3) {
+  border-color: var(--logo-pink);
+  color: #000;
+  background: color-mix(in srgb, var(--logo-pink) 12%, #fff);
+}
+
+.tag-pill:nth-of-type(4n+4) {
+  border-color: var(--logo-green);
+  color: #000;
+  background: color-mix(in srgb, var(--logo-green) 12%, #fff);
+}
+
+.tag-pill.tag-blue {
+  border-color: var(--logo-blue);
+  color: #000;
+  background: color-mix(in srgb, var(--logo-blue) 12%, #fff);
+}
+
+.tag-pill.tag-orange {
+  border-color: var(--logo-orange);
+  color: #000;
+  background: color-mix(in srgb, var(--logo-orange) 12%, #fff);
+}
+
+.tag-pill.tag-pink {
+  border-color: var(--logo-pink);
+  color: #000;
+  background: color-mix(in srgb, var(--logo-pink) 12%, #fff);
+}
+
+.tag-pill.tag-green {
+  border-color: var(--logo-green);
+  color: #000;
+  background: color-mix(in srgb, var(--logo-green) 12%, #fff);
+}
+
+/* =====================================================================
+   PAGE: Steering Committee (steering-committee.html)
+   ===================================================================== */
+.odsd-section {
+  background: #e9ecef;
+}
+
+.odsd-block {
+  max-width: 900px;
+  margin-bottom: 1.75rem;
+}
+
+.odsd-block > p {
+  margin-bottom: 0;
+}
+
+.odsd-block ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.odsd-block li {
+  position: relative;
+  padding-left: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.odsd-block li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  width: 0.8em;
+  height: 0.8em;
+  background: var(--bullet-icon) center / contain no-repeat;
+}
+
+.members-heading {
+  margin-bottom: 1rem;
+}
+
+.members-intro {
+  margin: 0 0 1.5rem;
+  text-align: left;
+}
+
+.members-photo {
+  width: 100%;
+  border-radius: 6px;
+  display: block;
+}
+
+.members-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.members-list li {
+  padding: 0.5rem 0.9rem;
+  background: #fff;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  transition: box-shadow 0.2s ease;
+}
+
+.members-list li:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.member-name {
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.member-org {
+  color: var(--text-body);
+}
+
+@media (max-width: 768px) {
+  .members-photo {
+    margin-bottom: 2rem;
+  }
+}
+
+/* =====================================================================
+   PAGE: Talking Points (talking-points.html)
+   ===================================================================== */
+.intro-line {
+  font-family: 'Metropolis', sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--text-dark);
+  max-width: 780px;
+  margin-bottom: 3rem;
+  line-height: 1.4;
+}
+
+.tp-block {
+  max-width: 820px;
+  margin-bottom: 3rem;
+}
+
+.tp-block:last-child {
+  margin-bottom: 0;
+}
+
+.tp-block ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+.tp-block li {
+  position: relative;
+  padding-left: 1.3rem;
+  margin-bottom: 0.85rem;
+}
+
+.tp-block li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  width: 0.8em;
+  height: 0.8em;
+  background: var(--bullet-icon) center / contain no-repeat;
+}
+
+.tp-block li:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .intro-line {
+    font-size: 1.25rem;
+  }
+}
+
+/* =====================================================================
+   PAGE: Unite Us (unite-us.html)
+   ===================================================================== */
+.resource-callout {
+  background: color-mix(in srgb, var(--logo-pink) 80%, transparent);
+  color: #fff;
+  padding: 2.5rem;
+  border-radius: 6px;
+  height: 100%;
+}
+
+.resource-callout h3 {
+  color: #fff;
+}
+
+.resource-info p {
+  margin-bottom: 1.5rem;
+}
+
+.partner-logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem 2.5rem;
+  align-items: center;
+}
+
+.partner-logo-chip {
+  border: 2px solid var(--border-light);
+  border-radius: 6px;
+  padding: 0.9rem 1.4rem;
+  font-family: 'Metropolis', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--text-body);
+  background: #fff;
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.partner-logo-chip:nth-of-type(4n+1) {
+  border-color: var(--logo-blue);
+}
+
+.partner-logo-chip:nth-of-type(4n+2) {
+  border-color: var(--logo-orange);
+}
+
+.partner-logo-chip:nth-of-type(4n+3) {
+  border-color: var(--logo-pink);
+}
+
+.partner-logo-chip:nth-of-type(4n+4) {
+  border-color: var(--logo-green);
+}
+
+a.partner-logo-chip:hover, a.partner-logo-chip:focus-visible {
+  background: #f0f0f0;
+}
+
+@media (max-width: 768px) {
+  .resource-callout {
+    margin-bottom: 2rem;
+  }
+}
+
+/* =====================================================================
+   PAGE: Find Food Now (find-food-now.html)
+   ===================================================================== */
+.resource-card {
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.resource-card-logo {
+  border-bottom: 1px solid var(--border-light);
+  background: #fafafa;
+}
+
+.resource-card-logo img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.resource-card-body {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.resource-card-body p {
+  flex-grow: 1;
+  margin-bottom: 1.5rem;
+}
+
+.resource-card-body .btn-cta {
+  align-self: flex-start;
+}
+
+.helpline-note {
+  background: var(--footer-bg);
+  padding: 1.5rem 2rem;
+  border-radius: 6px;
+  max-width: 760px;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .resource-card {
+    margin-bottom: 1.5rem;
+  }
+}
+

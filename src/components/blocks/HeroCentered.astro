@@ -1,0 +1,52 @@
+---
+import { urlFor } from '../../lib/sanity';
+import { resolveHref, isExternal } from '../../lib/link';
+import type { HeroCenteredBlock } from '../../types/sanity';
+
+interface Props {
+  block: HeroCenteredBlock;
+}
+
+const { block } = Astro.props;
+
+// The homepage's hero is visually larger and carries a description + CTAs;
+// every interior page hero is the plain, shorter variant. That difference
+// is fully determined by whether a description was authored, so we derive
+// the CSS treatment from content rather than adding an unjustified variant
+// field to the schema.
+const isFeatureHero = Boolean(block.description);
+const imageUrl = urlFor(block.image).width(1920).height(isFeatureHero ? 900 : 600).fit('crop').url();
+---
+
+<section class={isFeatureHero ? 'home-hero' : 'hero'}>
+  <img src={imageUrl} alt={block.image.alt} class="hero-bg-img" />
+  <div class="hero-overlay"></div>
+  {isFeatureHero ? (
+    <div class="hero-content">
+      <div class="home-hero-title-box">
+        <h1>{block.heading}</h1>
+      </div>
+      {block.description && <p class="hero-description">{block.description}</p>}
+      {block.actions && block.actions.length > 0 && (
+        <div class="hero-ctas">
+          {block.actions.map((action) => (
+            <a
+              href={resolveHref(action.link)}
+              class={action.style === 'primary' ? 'btn-cta' : action.style === 'outlineGold' ? 'btn-cta-outline-gold' : 'btn-cta-outline'}
+              target={isExternal(action.link) ? '_blank' : undefined}
+              rel={isExternal(action.link) ? 'noopener' : undefined}
+            >
+              {action.link.label}
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  ) : (
+    <div class="hero-title-box">
+      {block.eyebrow && <p class="hero-subtitle">{block.eyebrow}</p>}
+      <h1>{block.heading}</h1>
+      {block.subheading && <h2 class="text-center text-white">{block.subheading}</h2>}
+    </div>
+  )}
+</section>

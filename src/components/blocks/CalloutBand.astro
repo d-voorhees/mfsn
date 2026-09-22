@@ -1,0 +1,15 @@
+---
+import type { CalloutBandBlock } from '../../types/sanity';
+
+interface Props {
+  block: CalloutBandBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<div class={`navigator-callout navigator-callout--${block.color}`}>
+  <span class="callout-label">{block.label}</span>
+  <strong>{block.statement}</strong>
+  {block.body && ` ${block.body}`}
+</div>

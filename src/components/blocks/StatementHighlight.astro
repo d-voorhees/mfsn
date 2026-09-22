@@ -1,0 +1,38 @@
+---
+import { backgroundStyle } from '../../lib/sectionSettings';
+import type { StatementHighlightBlock } from '../../types/sanity';
+
+interface Props {
+  block: StatementHighlightBlock;
+}
+
+const { block } = Astro.props;
+const settings = block.settings ?? {};
+const headingLines = block.heading.split('\n').filter(Boolean);
+---
+
+<section
+  class="matters-section"
+  id={settings.anchorId || undefined}
+  style={backgroundStyle(settings)}
+>
+  <div class="container">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-4 order-1">
+        <h2 class="matters-heading pr-5">
+          {headingLines.map((line, index) => (
+            <>
+              {line}
+              {index < headingLines.length - 1 && <br />}
+            </>
+          ))}
+        </h2>
+      </div>
+      <div class="col-lg-7 offset-lg-1 order-2">
+        <ul class="matters-facts">
+          {block.facts.map((fact) => <li>{fact}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

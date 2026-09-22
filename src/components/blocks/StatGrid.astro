@@ -1,0 +1,49 @@
+---
+import { resolveHref, isExternal } from '../../lib/link';
+import { backgroundStyle } from '../../lib/sectionSettings';
+import type { StatGridBlock } from '../../types/sanity';
+
+interface Props {
+  block: StatGridBlock;
+}
+
+const { block } = Astro.props;
+const settings = block.settings ?? {};
+const colClass = block.columns === 'two' ? 'col-md-6' : block.columns === 'four' ? 'col-md-3' : 'col-md-4';
+const STAT_COLORS = ['stat-green', 'stat-orange', 'stat-pink', 'stat-blue'];
+---
+
+<section
+  class="stats-section"
+  id={settings.anchorId || undefined}
+  style={backgroundStyle(settings)}
+>
+  <div class="container">
+    {block.heading && <h2>{block.heading}</h2>}
+    <div class="row g-4">
+      {block.stats.map((stat, index) => {
+        const numberAndLabel = (
+          <>
+            <div class={`stat-number ${STAT_COLORS[index % STAT_COLORS.length]}`}>{stat.number}</div>
+            <div class="stat-label">{stat.label}</div>
+            {stat.link && (
+              <a
+                href={resolveHref(stat.link)}
+                class="stat-link"
+                target={isExternal(stat.link) ? '_blank' : undefined}
+                rel={isExternal(stat.link) ? 'noopener' : undefined}
+              >
+                {stat.link.label} &rarr;
+              </a>
+            )}
+          </>
+        );
+        return (
+          <div class={colClass}>
+            {block.itemStyle === 'band' ? <div class="navigator-stat-band">{numberAndLabel}</div> : numberAndLabel}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>

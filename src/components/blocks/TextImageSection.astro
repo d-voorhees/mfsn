@@ -1,0 +1,150 @@
+---
+import { urlFor } from '../../lib/sanity';
+import { renderPortableText } from '../../lib/portableText';
+import { resolveHref, isExternal } from '../../lib/link';
+import { backgroundStyle } from '../../lib/sectionSettings';
+import type { TextImageSectionBlock } from '../../types/sanity';
+
+interface Props {
+  block: TextImageSectionBlock;
+}
+
+const { block } = Astro.props;
+const settings = block.settings ?? {};
+const bodyHtml = renderPortableText(block.body, { listClass: block.listStyle === 'checklist' ? 'resources-list' : undefined });
+const imageFirst = block.mediaPosition === 'left';
+const isSpotlight = block.proseStyle === 'spotlight';
+
+// Each option maps to a real image treatment in site.css — these are not
+// interchangeable: .resources-photo force-crops to fill its box,
+// .alice-graphic/.docs-photo preserve the image's natural aspect ratio
+// (with/without rounded corners), and .network-intro-logo is a small
+// centered logo, not a full-width photo.
+const IMAGE_CLASS: Record<typeof block.imageStyle, string> = {
+  natural: 'alice-graphic',
+  cover: 'resources-photo',
+  rounded: 'docs-photo',
+  logo: 'network-intro-logo',
+};
+
+const callout = block.callout;
+const calloutFirst = callout?.position === 'left';
+---
+
+<section
+  id={settings.anchorId || undefined}
+  style={backgroundStyle(settings)}
+>
+  <div class="container">
+    {block.mediaPosition === 'none' && callout ? (
+      <div class={`row g-5 align-items-stretch${calloutFirst ? '' : ' flex-row-reverse'}`}>
+        <div class="col-md-5">
+          {callout.style === 'pink' ? (
+            <div class="resource-callout">
+              {callout.heading && <h3>{callout.heading}</h3>}
+              {callout.body && <p>{callout.body}</p>}
+            </div>
+          ) : (
+            <div class="hylo-card">
+              {callout.heading && <div class="hylo-wordmark">{callout.heading}</div>}
+              {callout.body && <p>{callout.body}</p>}
+              {callout.action && (
+                <a
+                  href={resolveHref(callout.action.link)}
+                  class={callout.action.style === 'primary' ? 'btn-cta' : callout.action.style === 'outlineGold' ? 'btn-cta-outline-gold' : 'btn-cta-outline'}
+                  target={isExternal(callout.action.link) ? '_blank' : undefined}
+                  rel={isExternal(callout.action.link) ? 'noopener' : undefined}
+                >
+                  {callout.action.link.label}
+                </a>
+              )}
+            </div>
+          )}
+        </div>
+        <div class="col-md-7">
+          <h2>{block.heading}</h2>
+          <Fragment set:html={bodyHtml} />
+          {block.actions && block.actions.length > 0 && (
+            <div class="section-actions">
+              {block.actions.map((action) => (
+                <a
+                  href={resolveHref(action.link)}
+                  class={action.style === 'primary' ? 'btn-cta' : action.style === 'outlineGold' ? 'btn-cta-outline-gold' : 'btn-cta-outline'}
+                  target={isExternal(action.link) ? '_blank' : undefined}
+                  rel={isExternal(action.link) ? 'noopener' : undefined}
+                >
+                  {action.link.label}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    ) : (
+      <div class={`row align-items-center g-5${imageFirst ? '' : ' flex-row-reverse'}`}>
+        {block.mediaPosition !== 'none' && block.image && (
+          <div class="col-lg-6">
+            <img src={urlFor(block.image).width(1000).url()} alt={block.image.alt} class={IMAGE_CLASS[block.imageStyle]} />
+          </div>
+        )}
+        <div class={block.mediaPosition === 'none' ? 'col-12' : 'col-lg-6'}>
+          {isSpotlight ? (
+            <div class="navigator-spotlight no-border">
+              {block.eyebrow && <div class="section-eyelash">{block.eyebrow}</div>}
+              <h2 class="navigator-title">{block.heading}</h2>
+              <div class="navigator-intro">
+                <Fragment set:html={bodyHtml} />
+              </div>
+              {block.actions && block.actions.length > 0 && (
+                <div class="section-actions">
+                  {block.actions.map((action) => (
+                    <a
+                      href={resolveHref(action.link)}
+                      class={action.style === 'primary' ? 'btn-cta' : action.style === 'outlineGold' ? 'btn-cta-outline-gold' : 'btn-cta-outline'}
+                      target={isExternal(action.link) ? '_blank' : undefined}
+                      rel={isExternal(action.link) ? 'noopener' : undefined}
+                    >
+                      {action.link.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <h2>{block.heading}</h2>
+              <Fragment set:html={bodyHtml} />
+              {block.linkList && block.linkList.length > 0 && (
+                <div class="year-links">
+                  {block.linkList.map((link) => (
+                    <a
+                      href={resolveHref(link)}
+                      target={isExternal(link) ? '_blank' : undefined}
+                      rel={isExternal(link) ? 'noopener' : undefined}
+                    >
+                      {link.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+              {block.actions && block.actions.length > 0 && (
+                <div class="section-actions">
+                  {block.actions.map((action) => (
+                    <a
+                      href={resolveHref(action.link)}
+                      class={action.style === 'primary' ? 'btn-cta' : action.style === 'outlineGold' ? 'btn-cta-outline-gold' : 'btn-cta-outline'}
+                      target={isExternal(action.link) ? '_blank' : undefined}
+                      rel={isExternal(action.link) ? 'noopener' : undefined}
+                    >
+                      {action.link.label}
+                    </a>
+                  ))}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    )}
+  </div>
+</section>

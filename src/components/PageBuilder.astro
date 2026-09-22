@@ -1,0 +1,97 @@
+---
+// The single dispatcher from a Sanity pageBuilder block's `_type` to its
+// Astro renderer. Page routes should do nothing more than
+// `<PageBuilder blocks={page.pageBuilder} />` — they must never import or
+// conditionally render individual block components themselves. If a route
+// starts branching on `_type`, that logic belongs here instead.
+//
+// This dispatches via a switch rather than a `_type`-keyed lookup object.
+// A lookup object can't be indexed by `block._type` and still have
+// TypeScript narrow `block` to the matching variant for the chosen
+// component's props (a known limitation of discriminated-union lookup
+// tables) — it would require an unsound cast at the call site. The switch
+// gives per-branch narrowing for free, and the `never`-typed default still
+// makes an unhandled `_type` a compile error the moment it's added to the
+// PageBlock union, so it satisfies the same "typed exhaustive, no
+// Record<string, any>" requirement as the map pattern would.
+import HeroCentered from './blocks/HeroCentered.astro';
+import RichTextSection from './blocks/RichTextSection.astro';
+import TextImageSection from './blocks/TextImageSection.astro';
+import TwoColumnImageSection from './blocks/TwoColumnImageSection.astro';
+import FeatureGrid from './blocks/FeatureGrid.astro';
+import StatGrid from './blocks/StatGrid.astro';
+import CalloutBand from './blocks/CalloutBand.astro';
+import PullQuote from './blocks/PullQuote.astro';
+import ResourceSpotlight from './blocks/ResourceSpotlight.astro';
+import StatementHighlight from './blocks/StatementHighlight.astro';
+import NewsGrid from './blocks/NewsGrid.astro';
+import LogoCloud from './blocks/LogoCloud.astro';
+import TeamGrid from './blocks/TeamGrid.astro';
+import NewsletterSignup from './blocks/NewsletterSignup.astro';
+import ResourceTagNav from './blocks/ResourceTagNav.astro';
+import type { PageBlock, ResourceSpotlightBlock } from '../types/sanity';
+
+interface Props {
+  blocks?: PageBlock[];
+}
+
+const { blocks = [] } = Astro.props;
+
+// The "Resource Topics" jump-nav isn't its own Sanity block — it's
+// computed from every resourceSpotlight block on the page (see
+// ResourceTagNav.astro) and rendered once, right before the first one.
+const resourceSpotlightBlocks = blocks.filter((b): b is ResourceSpotlightBlock => b._type === 'resourceSpotlight');
+const firstResourceSpotlight = resourceSpotlightBlocks[0];
+---
+
+{blocks.map((block) => {
+  if (block === firstResourceSpotlight) {
+    return (
+      <>
+        <ResourceTagNav blocks={resourceSpotlightBlocks} />
+        <ResourceSpotlight block={block} />
+      </>
+    );
+  }
+
+  switch (block._type) {
+    case 'heroCentered':
+      return <HeroCentered block={block} />;
+    case 'richTextSection':
+      return <RichTextSection block={block} />;
+    case 'textImageSection':
+      return <TextImageSection block={block} />;
+    case 'twoColumnImageSection':
+      return <TwoColumnImageSection block={block} />;
+    case 'featureGrid':
+      return <FeatureGrid block={block} />;
+    case 'statGrid':
+      return <StatGrid block={block} />;
+    case 'calloutBand':
+      return <CalloutBand block={block} />;
+    case 'pullQuote':
+      return <PullQuote block={block} />;
+    case 'resourceSpotlight':
+      return <ResourceSpotlight block={block} />;
+    case 'statementHighlight':
+      return <StatementHighlight block={block} />;
+    case 'newsGrid':
+      return <NewsGrid block={block} />;
+    case 'logoCloud':
+      return <LogoCloud block={block} />;
+    case 'teamGrid':
+      return <TeamGrid block={block} />;
+    case 'newsletterSignup':
+      return <NewsletterSignup block={block} />;
+    default: {
+      // Unreachable if every PageBlock member is handled above — TypeScript
+      // enforces that via this `never` assignment at compile time.
+      const unhandled: never = block;
+      const { _type, _key } = unhandled as {_type: string; _key: string};
+      if (import.meta.env.DEV) {
+        throw new Error(`PageBuilder: no renderer registered for block _type "${_type}" (_key: "${_key}").`);
+      }
+      return null;
+    }
+  }
+})}

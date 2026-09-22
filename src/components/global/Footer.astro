@@ -1,0 +1,44 @@
+---
+import { urlFor } from '../../lib/sanity';
+import { resolveHref, isExternal } from '../../lib/link';
+import type { SiteSettingsData } from '../../types/sanity';
+
+interface Props {
+  logo: SiteSettingsData['logo'];
+  footer?: SiteSettingsData['footer'];
+}
+
+const { logo, footer } = Astro.props;
+---
+
+<footer>
+  <div class="footer-inner">
+    <img src={urlFor(logo).width(160).url()} alt={logo.alt} class="footer-logo" />
+    <div class="footer-text">
+      {(footer?.contactPhone || footer?.contactEmail || footer?.locationText) && (
+        <div class="contact-line">
+          {footer.contactPhone && <a href={`tel:${footer.contactPhone.replace(/[^+\d]/g, '')}`}>{footer.contactPhone}</a>}
+          {footer.contactPhone && (footer.contactEmail || footer.locationText) && ' | '}
+          {footer.contactEmail}
+          {footer.contactEmail && footer.locationText && ' | '}
+          {footer.locationText}
+        </div>
+      )}
+      <div>
+        {footer?.copyrightText}
+        {footer?.legalLinks?.map((link) => (
+          <>
+            {' | '}
+            <a
+              href={resolveHref(link)}
+              target={isExternal(link) ? '_blank' : undefined}
+              rel={isExternal(link) ? 'noopener' : undefined}
+            >
+              {link.label}
+            </a>
+          </>
+        ))}
+      </div>
+    </div>
+  </div>
+</footer>

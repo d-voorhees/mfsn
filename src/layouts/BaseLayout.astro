@@ -1,0 +1,85 @@
+---
+// Fetched once per route here, rather than by every individual page —
+// nothing about siteSettings varies per-request in a statically generated
+// build, so there's no benefit to querying it more than once per page build,
+// and centralizing it means every route automatically stays in sync with
+// nav/footer/logo changes without remembering to query it itself.
+import { getSiteSettings } from '../lib/queries';
+import { urlFor } from '../lib/sanity';
+import Nav from '../components/global/Nav.astro';
+import Footer from '../components/global/Footer.astro';
+import type { SeoData } from '../types/sanity';
+import '../styles/site.css';
+
+interface Props {
+  title: string;
+  seo?: SeoData;
+}
+
+const { title, seo } = Astro.props;
+const siteSettings = await getSiteSettings();
+
+const metaTitle = seo?.metaTitle || siteSettings.defaultSeo?.metaTitle || title;
+const metaDescription = seo?.metaDescription || siteSettings.defaultSeo?.metaDescription;
+const shareImage = seo?.shareImage || siteSettings.defaultSeo?.shareImage;
+const noIndex = seo?.noIndex ?? false;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{metaTitle}</title>
+    {metaDescription && <meta name="description" content={metaDescription} />}
+    {noIndex && <meta name="robots" content="noindex" />}
+    {shareImage && <meta property="og:image" content={urlFor(shareImage).width(1200).url()} />}
+
+    <link rel="icon" type="image/x-icon" href="/favicon/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon/android-chrome-192x192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/favicon/android-chrome-512x512.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#f7941d" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link href="https://unpkg.com/@typehaus/metropolis" rel="stylesheet" />
+  </head>
+  <body>
+    <Nav navigation={siteSettings.navigation} logo={siteSettings.logo} siteName={siteSettings.siteName} />
+
+    <!-- data-pagefind-body scopes the search index (see package.json's
+         postbuild step) to actual page content, so a search for e.g.
+         "leadership" doesn't match every page just because that word is in
+         the nav that's repeated on all of them. No default browser styling
+         on <main> to preserve — verified no CSS selector in site.css
+         depends on body's direct-child structure. -->
+    <main data-pagefind-body>
+      <slot />
+    </main>
+
+    <Footer logo={siteSettings.logo} footer={siteSettings.footer} />
+
+    <script src="/mobile-menu.js" is:inline></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script is:inline>
+      window.gtranslateSettings = {
+        default_language: 'en',
+        native_language_names: true,
+        detect_browser_language: true,
+        languages: ['en', 'es', 'pt', 'ru', 'uk', 'ht'],
+        wrapper_selector: '.gtranslate_wrapper',
+        switcher_horizontal_position: 'inline',
+        float_switcher_open_direction: 'bottom',
+        flag_style: '3d',
+        alt_flags: { en: 'usa', pt: 'brazil' },
+      };
+    </script>
+    <script src="https://cdn.gtranslate.net/widgets/latest/float.js" defer></script>
+  </body>
+</html>

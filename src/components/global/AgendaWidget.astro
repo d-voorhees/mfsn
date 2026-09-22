@@ -1,0 +1,12 @@
+---
+// Not a page-builder block — zero editorial fields, purely live external
+// data (see Phase 1's audit). The homepage route mounts this directly
+// alongside the newsletterSignup block rather than through PageBuilder,
+// since PageBuilder only ever dispatches genuine Sanity content.
+---
+
+<div class="agenda-widget" data-feed="/api/calendar">
+  <p class="agenda-widget__status">Loading upcoming meetings&hellip;</p>
+</div>
+
+<script src="/calendar-widget.js" is:inline></script>

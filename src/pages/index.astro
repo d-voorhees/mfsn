@@ -1,0 +1,49 @@
+---
+// Homepage route. Stays generic per the project's page-builder architecture
+// with one deliberate, homepage-only exception: the source site's "Events &
+// Updates" section pairs the live calendar widget (agendaWidget — not a
+// Sanity block, see Phase 1's audit) with the newsletterSignup block in one
+// shared two-column row. PageBuilder itself never special-cases a block
+// type; this splice happens here, at the route level, because it's a
+// one-off homepage layout decision, not a generic pattern.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBuilder from '../components/PageBuilder.astro';
+import AgendaWidget from '../components/global/AgendaWidget.astro';
+import NewsletterSignup from '../components/blocks/NewsletterSignup.astro';
+import { getPageBySlug } from '../lib/queries';
+
+const page = await getPageBySlug('home');
+
+if (!page) {
+  throw new Error('Homepage (slug "home") not found in Sanity — has it been migrated/published?');
+}
+
+const blocks = page.pageBuilder ?? [];
+const newsletterIndex = blocks.findIndex((b) => b._type === 'newsletterSignup');
+const beforeNewsletter = newsletterIndex >= 0 ? blocks.slice(0, newsletterIndex) : blocks;
+const newsletterBlock = newsletterIndex >= 0 ? blocks[newsletterIndex] : null;
+const afterNewsletter = newsletterIndex >= 0 ? blocks.slice(newsletterIndex + 1) : [];
+---
+
+<BaseLayout title={page.title} seo={page.seo}>
+  <PageBuilder blocks={beforeNewsletter} />
+
+  {newsletterBlock && newsletterBlock._type === 'newsletterSignup' && (
+    <section class="docs-section" id="documents-and-updates">
+      <div class="container">
+        <h2>Events &amp; Updates</h2>
+        <div class="row g-5">
+          <div class="col-md-6">
+            <h3>Upcoming Meetings</h3>
+            <AgendaWidget />
+          </div>
+          <div class="col-md-6">
+            <NewsletterSignup block={newsletterBlock} />
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <PageBuilder blocks={afterNewsletter} />
+</BaseLayout>

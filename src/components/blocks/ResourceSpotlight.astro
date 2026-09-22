@@ -1,0 +1,54 @@
+---
+import { urlFor } from '../../lib/sanity';
+import { renderPortableText } from '../../lib/portableText';
+import { resolveHref, isExternal } from '../../lib/link';
+import { backgroundStyle } from '../../lib/sectionSettings';
+import type { ResourceSpotlightBlock } from '../../types/sanity';
+
+interface Props {
+  block: ResourceSpotlightBlock;
+}
+
+const { block } = Astro.props;
+const settings = block.settings ?? {};
+const bodyHtml = renderPortableText(block.body);
+const reversed = block.mediaPosition === 'right';
+---
+
+<section
+  class="resource-row"
+  id={settings.anchorId || undefined}
+  style={backgroundStyle(settings)}
+>
+  <div class="container">
+    <div class={`row g-4${reversed ? ' flex-md-row-reverse' : ''}`}>
+      <div class="col-md-4 resource-media">
+        {block.media && <img src={urlFor(block.media).width(600).url()} alt={block.media.alt} />}
+      </div>
+      <div class="col-md-8 resource-content">
+        <div class="resource-tags">
+          {block.tags.map((tag) => (
+            <span class={`tag-pill tag-${tag.colorKey}`}>{tag.label}</span>
+          ))}
+        </div>
+        <h2>{block.heading}</h2>
+        {block.subheading && <h3 class="subhead">{block.subheading}</h3>}
+        <Fragment set:html={bodyHtml} />
+        {block.resourceLinks && block.resourceLinks.length > 0 && (
+          <div class="resource-links">
+            {block.resourceLinks.map((link) => (
+              <a
+                href={resolveHref(link)}
+                class="resource-link"
+                target={isExternal(link) ? '_blank' : undefined}
+                rel={isExternal(link) ? 'noopener' : undefined}
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

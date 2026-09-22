@@ -1,0 +1,48 @@
+---
+import { urlFor } from '../../lib/sanity';
+import { renderPortableText } from '../../lib/portableText';
+import { resolveHref, isExternal } from '../../lib/link';
+import type { NewsGridBlock } from '../../types/sanity';
+
+interface Props {
+  block: NewsGridBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<section class="news-section" id="in-the-news">
+  <div class="container">
+    <h2>{block.heading}</h2>
+    <div class="row g-4">
+      {block.mentions.map((mention) => (
+        <div class="col-md-4 news-col">
+          {mention.outletLogo && (
+            <div class="news-logo">
+              <img src={urlFor(mention.outletLogo).width(160).url()} alt={mention.outletLogo.alt} />
+            </div>
+          )}
+          <h3 class="news-headline">{mention.headline}</h3>
+          {mention.byline && <p class="news-byline">{mention.byline}</p>}
+          <Fragment set:html={renderPortableText(mention.excerpt)} />
+          {mention.citation && <small class="news-citation">{mention.citation}</small>}
+          <a href={mention.url} class="news-link" target="_blank" rel="noopener">
+            {mention.linkLabel || 'Read Article'} &rarr;
+          </a>
+        </div>
+      ))}
+    </div>
+    {block.trailingLink && (
+      <div class="news-more-wrap">
+        <a
+          href={resolveHref(block.trailingLink)}
+          class="btn-cta"
+          target={isExternal(block.trailingLink) ? '_blank' : undefined}
+          rel={isExternal(block.trailingLink) ? 'noopener' : undefined}
+        >
+          {block.trailingLink.label}
+        </a>
+      </div>
+    )}
+  </div>
+</section>

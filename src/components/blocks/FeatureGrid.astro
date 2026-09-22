@@ -1,0 +1,124 @@
+---
+import { urlFor } from '../../lib/sanity';
+import { resolveHref, isExternal } from '../../lib/link';
+import { backgroundStyle } from '../../lib/sectionSettings';
+import type { FeatureGridBlock, FeatureGridMarkerIconKey } from '../../types/sanity';
+
+interface Props {
+  block: FeatureGridBlock;
+}
+
+const { block } = Astro.props;
+const settings = block.settings ?? {};
+
+// Sanity stores a semantic icon key, never a raw CSS class name — this map
+// is the one place that translates a key into the actual Phosphor icon
+// class the source site used for that concept.
+const ICON_CLASS: Record<FeatureGridMarkerIconKey, string> = {
+  connection: 'ph-plugs-connected',
+  funding: 'ph-hand-coins',
+  voice: 'ph-microphone-stage',
+  'data-sharing': 'ph-share-network',
+  resources: 'ph-tag',
+  discussions: 'ph-handshake',
+  coordination: 'ph-users-three',
+  messaging: 'ph-chat-circle-text',
+};
+
+const ROMAN_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
+
+// Source cycles these 4 accent colors across each card via a CSS custom
+// property (--pillar-color / --step-color) the card's border/background
+// or number color reads from — every featureGrid instance in the source
+// (How We Work, Strategic Pillars, Four-Pronged Strategy, Hylo features)
+// uses this exact blue/orange/pink/green sequence.
+const ACCENT_COLORS = ['var(--logo-blue)', 'var(--logo-orange)', 'var(--logo-pink)', 'var(--logo-green)'];
+
+// Two marker styles need genuinely different card markup, not just a color
+// swap: "number" (How We Work) uses .work-step (horizontal flex, number
+// beside text), and "none" (Partner With Us) uses plain centered .partner-col
+// text — no bordered/tinted box the way icon/numeral/logoImage cards have.
+const isWorkStep = block.markerStyle === 'number';
+const isPartnerStyle = block.markerStyle === 'none';
+
+const colSpanClass =
+  block.columns === 'two' ? 'col-md-6' : block.columns === 'four' ? 'col-sm-6 col-lg-3' : 'col-sm-6 col-lg-4';
+---
+
+<section id={settings.anchorId || undefined} style={backgroundStyle(settings)}>
+  <div class="container">
+    {block.icon ? (
+      <div class="partner-heading">
+        <img src={urlFor(block.icon).width(120).url()} alt={block.icon.alt} />
+        {block.heading && <h2>{block.heading}</h2>}
+      </div>
+    ) : (
+      block.heading && <h2>{block.heading}</h2>
+    )}
+    <div class="row pt-4 g-4">
+      {block.items.map((item, index) => {
+        const accent = ACCENT_COLORS[index % ACCENT_COLORS.length];
+        return isWorkStep ? (
+          <div class={colSpanClass}>
+            <div class="work-step" style={`--step-color: ${accent};`}>
+              <div class="work-step-number">{String(index + 1).padStart(2, '0')}</div>
+              <div>
+                <h3>{item.title}</h3>
+                {item.description && <p>{item.description}</p>}
+              </div>
+            </div>
+          </div>
+        ) : isPartnerStyle ? (
+          <div class={`${colSpanClass} partner-col`}>
+            <h3>{item.title}</h3>
+            {item.description && <p>{item.description}</p>}
+            {item.action && (
+              <a href={resolveHref(item.action.link)} class="partner-cta">
+                {item.action.link.label}
+              </a>
+            )}
+          </div>
+        ) : (
+          <div class={colSpanClass}>
+            <div class="pillar-card" style={`--pillar-color: ${accent};`}>
+              {block.markerStyle === 'icon' && item.markerIconKey && (
+                <div class="pillar-icon"><i class={`ph ${ICON_CLASS[item.markerIconKey]}`}></i></div>
+              )}
+              {block.markerStyle === 'numeral' && (
+                <span class="pillar-num">{ROMAN_NUMERALS[index] ?? index + 1}</span>
+              )}
+              {block.markerStyle === 'logoImage' && item.markerImage && (
+                <div class="resource-card-logo">
+                  <img src={urlFor(item.markerImage).width(200).url()} alt={item.markerImage.alt} />
+                </div>
+              )}
+              <h3>{item.title}</h3>
+              {item.description && <p>{item.description}</p>}
+              {item.action && (
+                <a
+                  href={resolveHref(item.action.link)}
+                  class={item.action.style === 'primary' ? 'btn-cta' : item.action.style === 'outlineGold' ? 'btn-cta-outline-gold' : 'btn-cta-outline'}
+                  target={isExternal(item.action.link) ? '_blank' : undefined}
+                  rel={isExternal(item.action.link) ? 'noopener' : undefined}
+                >
+                  {item.action.link.label}
+                </a>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+    {block.trailingLink && (
+      <div class="pillars-cta">
+        <a
+          href={resolveHref(block.trailingLink)}
+          target={isExternal(block.trailingLink) ? '_blank' : undefined}
+          rel={isExternal(block.trailingLink) ? 'noopener' : undefined}
+        >
+          {block.trailingLink.label}
+        </a>
+      </div>
+    )}
+  </div>
+</section>

@@ -1,0 +1,18 @@
+---
+import type { PullQuoteBlock } from '../../types/sanity';
+
+interface Props {
+  block: PullQuoteBlock;
+}
+
+const { block } = Astro.props;
+---
+
+<section class="quote-section">
+  <div class="container">
+    <p class="pull-quote">
+      {block.quote}
+      <cite>&mdash; {block.citationName}{block.citationDetail ? `, ${block.citationDetail}` : ''}</cite>
+    </p>
+  </div>
+</section>

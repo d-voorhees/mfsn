@@ -1,0 +1,118 @@
+---
+import { urlFor } from '../../lib/sanity';
+import { renderPortableText } from '../../lib/portableText';
+import { resolveHref, isExternal } from '../../lib/link';
+import { backgroundStyle, NARROW_COLUMN_CLASS } from '../../lib/sectionSettings';
+import type { RichTextSectionBlock } from '../../types/sanity';
+
+interface Props {
+  block: RichTextSectionBlock;
+}
+
+const { block } = Astro.props;
+const settings = block.settings ?? {};
+const isNarrow = settings.width === 'narrow';
+const isSpotlight = block.proseStyle === 'spotlight';
+
+const bodyHtml = renderPortableText(block.body);
+
+// Each proseStyle option wraps the body in the class the source applied
+// per-paragraph for that treatment (vision-quote, intro-line, or the
+// navigator-spotlight pattern's navigator-intro). Applying it to the whole
+// body div rather than per-paragraph is a slight simplification for
+// multi-paragraph bodies, but every current instance of "quote"/"lead" is a
+// single short paragraph, so it's visually equivalent in practice.
+const bodyWrapperClass =
+  block.proseStyle === 'quote' ? 'vision-quote' : block.proseStyle === 'lead' ? 'intro-line' : isSpotlight ? 'navigator-intro' : undefined;
+---
+
+<section id={settings.anchorId || undefined} style={backgroundStyle(settings)}>
+  <div class="container">
+    <div class={isNarrow ? 'row' : undefined}>
+      <div class={[isNarrow ? NARROW_COLUMN_CLASS : '', settings.alignment === 'center' ? 'text-center' : ''].filter(Boolean).join(' ') || undefined}>
+        {isSpotlight ? (
+          <div class="navigator-spotlight no-border">
+            {block.icon && (
+              <img
+                src={urlFor(block.icon).width(120).url()}
+                alt={block.icon.alt}
+                style="width: 60px; height: auto; margin-bottom: 0.75rem;"
+              />
+            )}
+            {block.eyebrow && <div class="section-eyelash">{block.eyebrow}</div>}
+            {block.heading && <h2 class="navigator-title">{block.heading}</h2>}
+            <div class={bodyWrapperClass}>
+              <Fragment set:html={bodyHtml} />
+            </div>
+            {block.caveatText && <p class="navigator-caveat">{block.caveatText}</p>}
+            {block.mapEmbed && (
+              <div class="map-embed">
+                <iframe src={block.mapEmbed.embedUrl} title={block.mapEmbed.title} loading="lazy" allowfullscreen></iframe>
+              </div>
+            )}
+            {block.actions && block.actions.length > 0 && (
+              <div class="section-actions">
+                {block.actions.map((action) => (
+                  <a
+                    href={resolveHref(action.link)}
+                    class={action.style === 'primary' ? 'btn-cta' : action.style === 'outlineGold' ? 'btn-cta-outline-gold' : 'btn-cta-outline'}
+                    target={isExternal(action.link) ? '_blank' : undefined}
+                    rel={isExternal(action.link) ? 'noopener' : undefined}
+                  >
+                    {action.link.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        ) : (
+          <>
+            {block.icon && (
+              <img
+                src={urlFor(block.icon).width(120).url()}
+                alt={block.icon.alt}
+                style="width: 60px; height: auto; margin-bottom: 0.75rem;"
+              />
+            )}
+            {block.eyebrow && <div class="section-eyelash">{block.eyebrow}</div>}
+            {block.heading && <h2>{block.heading}</h2>}
+            {block.columns && block.columns.length > 0 ? (
+              <div class="row g-5 navigator-outcomes">
+                {block.columns.map((col) => (
+                  <div class="col-md-6">
+                    {col.headingText && (col.headingTag === 'h3' ? <h3>{col.headingText}</h3> : <h4>{col.headingText}</h4>)}
+                    <Fragment set:html={renderPortableText(col.body)} />
+                  </div>
+                ))}
+              </div>
+            ) : bodyWrapperClass ? (
+              <div class={bodyWrapperClass}><Fragment set:html={bodyHtml} /></div>
+            ) : (
+              <Fragment set:html={bodyHtml} />
+            )}
+            {block.caveatText && <p class="navigator-caveat">{block.caveatText}</p>}
+            {block.mapEmbed && (
+              <div class="map-embed">
+                <iframe src={block.mapEmbed.embedUrl} title={block.mapEmbed.title} loading="lazy" allowfullscreen></iframe>
+              </div>
+            )}
+            {block.actions && block.actions.length > 0 && (
+              <div class="section-actions">
+                {block.actions.map((action) => (
+                  <a
+                    href={resolveHref(action.link)}
+                    class={action.style === 'primary' ? 'btn-cta' : action.style === 'outlineGold' ? 'btn-cta-outline-gold' : 'btn-cta-outline'}
+                    target={isExternal(action.link) ? '_blank' : undefined}
+                    rel={isExternal(action.link) ? 'noopener' : undefined}
+                  >
+                    {action.link.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

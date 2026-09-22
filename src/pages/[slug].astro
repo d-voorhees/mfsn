@@ -1,0 +1,33 @@
+---
+// Every ordinary page except the homepage (which has its own route/layout
+// splice, see src/pages/index.astro). Fully generic per the page-builder
+// architecture: fetch the page, hand its pageBuilder straight to
+// <PageBuilder />, no branching on individual block types here.
+//
+// Static (SSG): getStaticPaths() below enumerates every known slug at
+// build time, so each of these 14 pages is a plain prerendered HTML file,
+// matching the project's SSG recommendation — nothing about this
+// content is per-request or personalized.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageBuilder from '../components/PageBuilder.astro';
+import { getAllPageSlugsExceptHome, getPageBySlug } from '../lib/queries';
+import type { PageData } from '../types/sanity';
+
+export async function getStaticPaths() {
+  const slugs = await getAllPageSlugsExceptHome();
+  const pages = await Promise.all(slugs.map((slug) => getPageBySlug(slug)));
+  return pages
+    .filter((page): page is PageData => page !== null)
+    .map((page) => ({ params: { slug: page.slug.current }, props: { page } }));
+}
+
+interface Props {
+  page: PageData;
+}
+
+const { page } = Astro.props;
+---
+
+<BaseLayout title={page.title} seo={page.seo}>
+  <PageBuilder blocks={page.pageBuilder} />
+</BaseLayout>
