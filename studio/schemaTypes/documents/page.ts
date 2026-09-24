@@ -35,6 +35,7 @@ export default defineType({
         {type: 'pullQuote'},
         {type: 'resourceSpotlight'},
         {type: 'statementHighlight'},
+        {type: 'tagList'},
         {type: 'newsGrid'},
         {type: 'logoCloud'},
         {type: 'teamGrid'},

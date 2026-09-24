@@ -12,6 +12,7 @@ const { block } = Astro.props;
 {block.display === 'cards' ? (
   <section class="support-section">
     <div class="container">
+      <h2 class="visually-hidden">Our team</h2>
       <div class="row justify-content-center g-5">
         {block.people.map((person) => (
           <div class="col-md-6 col-lg-5 team-member">

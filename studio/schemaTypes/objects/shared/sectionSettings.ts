@@ -50,6 +50,20 @@ export default defineType({
       initialValue: 'left',
     }),
     defineField({
+      name: 'padTop',
+      title: 'Top padding',
+      type: 'string',
+      options: {list: [{title: 'Default', value: 'default'}, {title: 'None', value: 'none'}]},
+      initialValue: 'default',
+    }),
+    defineField({
+      name: 'padBottom',
+      title: 'Bottom padding',
+      type: 'string',
+      options: {list: [{title: 'Default', value: 'default'}, {title: 'None', value: 'none'}]},
+      initialValue: 'default',
+    }),
+    defineField({
       name: 'anchorId',
       title: 'Anchor ID',
       type: 'string',

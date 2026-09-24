@@ -24,3 +24,10 @@ export function backgroundStyle(settings?: SectionSettings): string | undefined 
 // offset-lg-2 for a tighter column on very large screens) onto the fuller
 // one, since both read as "centered narrow column" at ordinary widths.
 export const NARROW_COLUMN_CLASS = 'col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2';
+
+// Bootstrap spacing utilities (pt-0 / pb-0) that override the default
+// `section { padding: 5em 0 }`.
+export function paddingClass(settings?: SectionSettings): string | undefined {
+  const classes = [settings?.padTop === 'none' ? 'pt-0' : '', settings?.padBottom === 'none' ? 'pb-0' : ''].filter(Boolean);
+  return classes.length ? classes.join(' ') : undefined;
+}

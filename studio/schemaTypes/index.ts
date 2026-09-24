@@ -21,6 +21,7 @@ import calloutBand from './objects/blocks/calloutBand'
 import pullQuote from './objects/blocks/pullQuote'
 import resourceSpotlight from './objects/blocks/resourceSpotlight'
 import statementHighlight from './objects/blocks/statementHighlight'
+import tagList from './objects/blocks/tagList'
 import newsGrid from './objects/blocks/newsGrid'
 import logoCloud from './objects/blocks/logoCloud'
 import teamGrid from './objects/blocks/teamGrid'
@@ -54,6 +55,7 @@ export const schemaTypes = [
   pullQuote,
   resourceSpotlight,
   statementHighlight,
+  tagList,
   newsGrid,
   logoCloud,
   teamGrid,

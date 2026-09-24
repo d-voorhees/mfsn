@@ -1019,7 +1019,28 @@ export async function buildPages() {
         body: paragraphs(
           'To best serve Manatee residents, especially vulnerable populations such as the elderly, homeless, undocumented, LGBTQIA, disabled and many others, these links provide helpful resources to inform staff and clients. While this is not an exhaustive list, it is a live resource page that is updated regularly. We want to feature your resources too! Please share them with us at director@manateefood.org',
         ),
+        settings: { padBottom: 'none' },
       }),
+      {
+        _type: 'tagList',
+        _key: key('tags'),
+        heading: 'Resource Topics',
+        tags: [
+          ['Accessibility', 'accessibility'],
+          ['Best Practices', 'accessibility'],
+          ['DEI & Inclusion', 'building-belonging'],
+          ['Youth & Families', 'feeding-youth'],
+          ['Immigrant Community', 'unidosnow'],
+          ['Homeless / Unhoused', 'homeless-education'],
+          ['Legal Rights', 'immigrant-legal'],
+          ['Substance Abuse Recovery', 'active-addiction'],
+          ['Seniors & Elderly', 'seniors-hunger'],
+          ['Veterans & Military Families', 'veterans'],
+          ['Client Dignity', 'client-choice'],
+          ['Data on Food Prices', 'fast-facts-hunger'],
+        ].map(([label, anchorId]) => ({ _key: key('tag'), label, anchorId })),
+        settings: { padTop: 'none' },
+      },
       await resourceSpotlight({
         heading: 'Accessibility for Every Body',
         imgFile: 'img/resources-1.jpg',

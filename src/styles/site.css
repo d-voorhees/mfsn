@@ -13,8 +13,8 @@
   --footer-bg: #f1f3f4;
   --site-footer-bg: #000000;
   --site-footer-text: #e8eaed;
-  --accent-gold: #b9812e;
-  --accent-gold-dark: #96692a;
+  --accent-gold: #8a601d;      /* white text on this = 5.6:1 (WCAG AA) */
+  --accent-gold-dark: #6b4a14;
   --logo-pink: #ec008c;
   --logo-green: #b2d235;
   --logo-orange: #f9a01b;
@@ -74,7 +74,8 @@ h2 {
   align-items: center;
   gap: 1.75rem;
 }
-.navbar-custom .nav-links a {
+.navbar-custom .nav-links a,
+.navbar-custom .nav-links .dropdown-toggle {
   color: white;
   text-decoration: none;
   font-family: 'Metropolis', sans-serif;
@@ -83,7 +84,15 @@ h2 {
   align-items: center;
   gap: 4px;
 }
-.navbar-custom .nav-links a:hover { opacity: 0.85; }
+.navbar-custom .nav-links .dropdown-toggle {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  font-weight: 800;
+}
+.navbar-custom .nav-links a:hover,
+.navbar-custom .nav-links .dropdown-toggle:hover { opacity: 0.85; }
 .caret { font-size: 0.65rem; display: inline-block; margin-left: 2px; }
 
 /* Nav dropdowns (global — was previously scoped only to body.page-index) */
@@ -332,10 +341,15 @@ footer a:hover {
   display: flex;
   flex-direction: column;
   transform: translateX(100%);
-  transition: transform 0.3s ease;
+  visibility: hidden;
+  transition: transform 0.3s ease, visibility 0s linear 0.3s;
 }
 
-.mobile-menu.is-open { transform: translateX(0); }
+.mobile-menu.is-open {
+  transform: translateX(0);
+  visibility: visible;
+  transition: transform 0.3s ease, visibility 0s;
+}
 
 .mobile-menu-header {
   display: flex;
@@ -516,7 +530,7 @@ body.mobile-menu-open { overflow: hidden; }
   border: 2px solid transparent;
   border-radius: 999px;
   text-decoration: none;
-  box-shadow: 0 3px 10px rgba(185, 129, 46, 0.35);
+  box-shadow: 0 3px 10px rgba(138, 96, 29, 0.35);
   transition: all 0.2s ease;
   appearance: none;
   cursor: pointer;
@@ -526,7 +540,7 @@ body.mobile-menu-open { overflow: hidden; }
   background: var(--accent-gold-dark);
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(185, 129, 46, 0.4);
+  box-shadow: 0 6px 16px rgba(138, 96, 29, 0.4);
 }
 
 .btn-cta::after {
@@ -596,8 +610,8 @@ body.mobile-menu-open { overflow: hidden; }
   --text-dark: #000000;
   --text-body: #000000;
   --bg-light: #f1f3f4;
-  --accent-gold: #c8933d;
-  --accent-gold-dark: #a9772c;
+  --accent-gold: #8a601d;
+  --accent-gold-dark: #6b4a14;
   --accent-gold-bg: #d5ac6a;
 }
 
@@ -840,7 +854,7 @@ h2.matters-heading.pr-5 {
   font-family: 'Metropolis', sans-serif;
   font-size: 3.5rem;
   font-weight: 800;
-  color: var(--step-color, var(--accent-gold));
+  color: color-mix(in srgb, var(--step-color, var(--accent-gold)) 55%, #000);
   line-height: 1;
   flex-shrink: 0;
   width: 3.5rem;
@@ -1136,7 +1150,7 @@ h2.matters-heading.pr-5 {
 
 .navigator-callout .callout-label {
   font-weight: 700;
-  color: var(--callout-color, var(--accent-gold-dark));
+  color: color-mix(in srgb, var(--callout-color, var(--accent-gold-dark)) 55%, #000);
   letter-spacing: 0.3px;
 }
 
@@ -1601,7 +1615,7 @@ a.partner-card:hover {
   font-family: 'Metropolis', sans-serif;
   font-weight: 800;
   font-size: 1.75rem;
-  color: var(--pillar-color);
+  color: color-mix(in srgb, var(--pillar-color) 55%, #000);
   display: block;
   margin-bottom: 0.5rem;
 }
@@ -2236,7 +2250,7 @@ body.search-open { overflow: hidden; }
 }
 
 .search-bar-form input[type="search"]:focus {
-  outline: none;
+  outline: 2px solid transparent; /* visible in Windows high-contrast mode */
   border-color: var(--accent-gold);
   box-shadow: 0 0 0 4px rgba(185, 129, 46, 0.18);
 }
@@ -2367,4 +2381,67 @@ body.search-open { overflow: hidden; }
   width: 0.8em;
   height: 0.8em;
   background: var(--bullet-icon) center / contain no-repeat;
+}
+
+
+/* ================= Accessibility ================= */
+.skip-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2000;
+  padding: 0.75rem 1.25rem;
+  background: #000;
+  color: #fff;
+  font-weight: 800;
+  text-decoration: underline;
+  transform: translateY(-120%);
+}
+.skip-link:focus { transform: translateY(0); }
+main:focus { outline: none; }
+
+/* One consistent, high-contrast keyboard focus ring. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--accent-gold-dark);
+  outline-offset: 3px;
+}
+.navbar-custom a:focus-visible,
+.navbar-custom button:focus-visible,
+footer a:focus-visible,
+.hero a:focus-visible,
+.home-hero a:focus-visible {
+  outline-color: #fff;
+}
+.skip-link:focus-visible { outline-color: #fff; }
+
+/* Links inside running text must not rely on color alone. */
+main p a:not([class]),
+main li a:not([class]),
+.rich-text-body a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Used when an <h1> stands in for the h2 look (pages with no hero). */
+.page-title-h2 {
+  font-size: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+  .btn-cta:hover { transform: none; }
 }

@@ -31,7 +31,7 @@ const mobileMenuLogoUrl =
   'https://cdn.sanity.io/images/js71ru0h/production/0d98cfc2fd941f9bf44f21f8679307200700c574-886x804.png?w=200';
 ---
 
-<nav class="navbar-custom">
+<nav class="navbar-custom" aria-label="Main">
   <div class="d-flex justify-content-between align-items-center">
     <a href="/" class="brand">
       <img src={logoUrl} alt={logo.alt} class="brand-logo" />
@@ -42,9 +42,9 @@ const mobileMenuLogoUrl =
         {navigation.map((item) =>
           item.dropdownItems && item.dropdownItems.length > 0 ? (
             <div class="dropdown">
-              <a href="#" class="dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                {item.label} <span class="caret">&#9662;</span>
-              </a>
+              <button type="button" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                {item.label} <span class="caret" aria-hidden="true">&#9662;</span>
+              </button>
               <ul class="dropdown-menu">
                 {item.dropdownItems.map((child) => (
                   <li>
@@ -55,7 +55,7 @@ const mobileMenuLogoUrl =
                       rel={isExternal(child.link) ? 'noopener' : undefined}
                     >
                       {child.label}
-                    </a>
+                    {isExternal(child.link) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
                   </li>
                 ))}
               </ul>
@@ -67,33 +67,33 @@ const mobileMenuLogoUrl =
               rel={isExternal(item.link) ? 'noopener' : undefined}
             >
               {item.label}
-            </a>
+            {isExternal(item.link) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
           ),
         )}
-        <a href="/search/" class="nav-search" data-search-open aria-label="Search"><i class="bi bi-search"></i></a>
+        <a href="/search/" class="nav-search" data-search-open aria-label="Search"><i class="bi bi-search" aria-hidden="true"></i></a>
       </div>
       <button type="button" class="nav-search nav-search-mobile" data-search-open aria-label="Search">
-        <i class="bi bi-search"></i>
+        <i class="bi bi-search" aria-hidden="true"></i>
       </button>
       <div class="translate-anchor">
         <div class="gtranslate_wrapper"></div>
       </div>
       <button class="mobile-menu-toggle" id="mobileMenuToggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
-        <i class="ph ph-dots-three-circle"></i>
+        <i class="ph ph-dots-three-circle" aria-hidden="true"></i>
       </button>
     </div>
   </div>
 </nav>
 
 <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
-<div class="mobile-menu" id="mobileMenu" data-active-panel="root" aria-hidden="true">
+<div class="mobile-menu" id="mobileMenu" data-active-panel="root" role="dialog" aria-modal="true" aria-label="Site menu" aria-hidden="true">
   <div class="mobile-menu-header">
     <a href="/" class="mobile-menu-brand">
       <img src={mobileMenuLogoUrl} alt={logo.alt} class="mobile-menu-logo" width="886" height="804" />
       <span>{siteName}</span>
     </a>
     <button class="mobile-menu-close" id="mobileMenuClose" type="button" aria-label="Close menu">
-      <i class="ph ph-x"></i>
+      <i class="ph ph-x" aria-hidden="true"></i>
     </button>
   </div>
   <div class="mobile-menu-panels">
@@ -104,7 +104,7 @@ const mobileMenuLogoUrl =
             {item.dropdownItems && item.dropdownItems.length > 0 ? (
               <button class="mobile-menu-drill" data-target={panelId(item)} type="button">
                 <span>{item.label}</span>
-                <i class="ph ph-arrow-right"></i>
+                <i class="ph ph-arrow-right" aria-hidden="true"></i>
               </button>
             ) : (
               <a
@@ -113,7 +113,7 @@ const mobileMenuLogoUrl =
                 rel={isExternal(item.link) ? 'noopener' : undefined}
               >
                 {item.label}
-              </a>
+              {isExternal(item.link) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
             )}
           </li>
         ))}
@@ -122,7 +122,7 @@ const mobileMenuLogoUrl =
     {dropdownGroups.map((item) => (
       <div class="mobile-menu-panel" data-panel={panelId(item)}>
         <button class="mobile-menu-back" type="button">
-          <i class="ph ph-arrow-left"></i> <span>{item.label}</span>
+          <i class="ph ph-arrow-left" aria-hidden="true"></i> <span>{item.label}</span>
         </button>
         <ul class="mobile-menu-list">
           {item.dropdownItems!.map((child) => (
@@ -133,7 +133,7 @@ const mobileMenuLogoUrl =
                 rel={isExternal(child.link) ? 'noopener' : undefined}
               >
                 {child.label}
-              </a>
+              {isExternal(child.link) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
             </li>
           ))}
         </ul>

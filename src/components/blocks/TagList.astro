@@ -1,0 +1,24 @@
+---
+import { backgroundStyle, paddingClass } from '../../lib/sectionSettings';
+import type { TagListBlock } from '../../types/sanity';
+
+interface Props {
+  block: TagListBlock;
+}
+
+const { block } = Astro.props;
+const settings = block.settings ?? {};
+const COLORS = ['tag-blue', 'tag-orange', 'tag-pink', 'tag-green'];
+const sectionClass = ['intro-section', paddingClass(settings)].filter(Boolean).join(' ');
+---
+
+<section class={sectionClass} id={settings.anchorId || undefined} style={backgroundStyle(settings)}>
+  <div class="container">
+    {block.heading && <h3 class="pt-4">{block.heading}</h3>}
+    <div class="master-tag-list">
+      {block.tags.map((tag, i) => (
+        <a href={`#${tag.anchorId}`} class={`tag-pill ${COLORS[i % COLORS.length]}`}>{tag.label}</a>
+      ))}
+    </div>
+  </div>
+</section>

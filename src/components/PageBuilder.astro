@@ -23,6 +23,7 @@ import StatGrid from './blocks/StatGrid.astro';
 import CalloutBand from './blocks/CalloutBand.astro';
 import PullQuote from './blocks/PullQuote.astro';
 import ResourceSpotlight from './blocks/ResourceSpotlight.astro';
+import TagList from './blocks/TagList.astro';
 import StatementHighlight from './blocks/StatementHighlight.astro';
 import NewsGrid from './blocks/NewsGrid.astro';
 import LogoCloud from './blocks/LogoCloud.astro';
@@ -36,6 +37,10 @@ interface Props {
 
 const { blocks = [] } = Astro.props;
 
+// A page with no hero has no <h1>; the first rich-text heading becomes it.
+const hasHero = blocks.some((b) => b._type === 'heroCentered');
+const titleBlock = hasHero ? undefined : blocks.find((b) => b._type === 'richTextSection' && b.heading);
+
 ---
 
 {blocks.map((block) => {
@@ -43,7 +48,7 @@ const { blocks = [] } = Astro.props;
     case 'heroCentered':
       return <HeroCentered block={block} />;
     case 'richTextSection':
-      return <RichTextSection block={block} />;
+      return <RichTextSection block={block} asPageTitle={block === titleBlock} />;
     case 'textImageSection':
       return <TextImageSection block={block} />;
     case 'twoColumnImageSection':
@@ -58,6 +63,8 @@ const { blocks = [] } = Astro.props;
       return <PullQuote block={block} />;
     case 'resourceSpotlight':
       return <ResourceSpotlight block={block} />;
+    case 'tagList':
+      return <TagList block={block} />;
     case 'statementHighlight':
       return <StatementHighlight block={block} />;
     case 'newsGrid':

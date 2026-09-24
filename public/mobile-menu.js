@@ -16,6 +16,9 @@
       document.body.classList.add('mobile-menu-open');
       toggle.setAttribute('aria-expanded', 'true');
       menu.setAttribute('aria-hidden', 'false');
+      // Move focus into the dialog (the closed menu is visibility:hidden, so
+      // it is only focusable once open).
+      if (closeBtn) closeBtn.focus();
     }
 
     function closeMenu() {
@@ -25,7 +28,28 @@
       toggle.setAttribute('aria-expanded', 'false');
       menu.setAttribute('aria-hidden', 'true');
       menu.setAttribute('data-active-panel', 'root');
+      toggle.focus();
     }
+
+    // Keep Tab / Shift+Tab inside the open menu, and only inside the panel
+    // that is currently showing (the other drill-down panels are off-screen).
+    function focusables() {
+      var active = menu.getAttribute('data-active-panel');
+      var scope = menu.querySelector('.mobile-menu-panel[data-panel="' + active + '"]');
+      var list = Array.prototype.slice.call(menu.querySelectorAll('.mobile-menu-header a, .mobile-menu-header button'));
+      if (scope) list = list.concat(Array.prototype.slice.call(scope.querySelectorAll('a[href], button')));
+      return list;
+    }
+
+    menu.addEventListener('keydown', function (e) {
+      if (e.key !== 'Tab') return;
+      var items = focusables();
+      if (!items.length) return;
+      var first = items[0];
+      var last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    });
 
     toggle.addEventListener('click', function () {
       if (menu.classList.contains('is-open')) {
@@ -41,12 +65,16 @@
     drillButtons.forEach(function (btn) {
       btn.addEventListener('click', function () {
         menu.setAttribute('data-active-panel', btn.getAttribute('data-target'));
+        var next = menu.querySelector('.mobile-menu-panel[data-panel="' + btn.getAttribute('data-target') + '"] .mobile-menu-back');
+        if (next) next.focus();
       });
     });
 
     backButtons.forEach(function (btn) {
       btn.addEventListener('click', function () {
         menu.setAttribute('data-active-panel', 'root');
+        var root = menu.querySelector('.mobile-menu-panel[data-panel="root"] .mobile-menu-drill');
+        if (root) root.focus();
       });
     });
 

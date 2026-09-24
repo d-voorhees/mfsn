@@ -62,6 +62,7 @@ const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).href :
     <link href="https://unpkg.com/@typehaus/metropolis" rel="stylesheet" />
   </head>
   <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
     <Nav navigation={siteSettings.navigation} logo={siteSettings.logo} siteName={siteSettings.siteName} />
 
     <!-- data-pagefind-body scopes the search index (see package.json's
@@ -70,7 +71,7 @@ const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).href :
          the nav that's repeated on all of them. No default browser styling
          on <main> to preserve — verified no CSS selector in site.css
          depends on body's direct-child structure. -->
-    <main data-pagefind-body>
+    <main id="main" tabindex="-1" data-pagefind-body>
       <slot />
     </main>
 

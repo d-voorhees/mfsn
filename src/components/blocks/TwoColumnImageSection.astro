@@ -37,7 +37,7 @@ const settings = block.settings ?? {};
                   rel={isExternal(action.link) ? 'noopener' : undefined}
                 >
                   {action.link.label}
-                </a>
+                {isExternal(action.link) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
               ))}
             </div>
           )}

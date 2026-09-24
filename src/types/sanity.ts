@@ -26,6 +26,8 @@ export interface SectionSettings {
   background?: 'default' | 'tinted' | 'light' | 'gray' | 'gold' | 'white'
   width?: 'narrow' | 'standard'
   alignment?: 'left' | 'center'
+  padTop?: 'default' | 'none'
+  padBottom?: 'default' | 'none'
   anchorId?: string
 }
 
@@ -242,6 +244,14 @@ export interface ResourceSpotlightBlock {
   settings?: SectionSettings
 }
 
+export interface TagListBlock {
+  _type: 'tagList'
+  _key: string
+  heading?: string
+  tags: {_key: string; label: string; anchorId: string}[]
+  settings?: SectionSettings
+}
+
 export interface StatementHighlightBlock {
   _type: 'statementHighlight'
   _key: string
@@ -309,6 +319,7 @@ export type PageBlock =
   | PullQuoteBlock
   | ResourceSpotlightBlock
   | StatementHighlightBlock
+  | TagListBlock
   | NewsGridBlock
   | LogoCloudBlock
   | TeamGridBlock

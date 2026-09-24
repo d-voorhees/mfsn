@@ -39,7 +39,7 @@ const reversed = block.mediaPosition === 'right';
                 rel={isExternal(link) ? 'noopener' : undefined}
               >
                 {link.label}
-              </a>
+              {isExternal(link) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
             ))}
           </div>
         )}

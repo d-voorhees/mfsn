@@ -28,7 +28,7 @@ const { block } = Astro.props;
           {mention.citation && <small class="news-citation">{mention.citation}</small>}
           <a href={mention.url} class="news-link" target="_blank" rel="noopener">
             {mention.linkLabel || 'Read Article'} &rarr;
-          </a>
+          <span class="visually-hidden"> (opens in a new tab)</span></a>
         </div>
       ))}
     </div>
@@ -41,7 +41,7 @@ const { block } = Astro.props;
           rel={isExternal(block.trailingLink) ? 'noopener' : undefined}
         >
           {block.trailingLink.label}
-        </a>
+        {isExternal(block.trailingLink) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
       </div>
     )}
   </div>

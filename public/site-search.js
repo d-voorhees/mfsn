@@ -103,7 +103,7 @@
     resultsEl.innerHTML = items
       .map(function (item) {
         var title = (item.meta && item.meta.title ? item.meta.title : item.url)
-          .replace(/\s*\|\s*Manatee Food Security Network.*$/, '');
+          .replace(/\s*\|\s*(Manatee Food Security Network|MFSN).*$/, '');
         return (
           '<article class="search-result">' +
           '<h3><a href="' + esc(item.url) + '">' + esc(title) + '</a></h3>' +
@@ -135,6 +135,21 @@
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
     if (isOpen(modal) || isOpen(bar)) closeAll();
+  });
+
+  // Keep Tab / Shift+Tab inside whichever search dialog is open.
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab') return;
+    var dialog = isOpen(modal) ? modal : isOpen(bar) ? bar : null;
+    if (!dialog) return;
+    var items = Array.prototype.slice.call(dialog.querySelectorAll('a[href], button, input'))
+      .filter(function (el) { return !el.disabled && el.offsetParent !== null; });
+    if (!items.length) return;
+    var first = items[0];
+    var last = items[items.length - 1];
+    if (!dialog.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+    else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
 
   // Exposed for the /search/ fallback page and any future callers.

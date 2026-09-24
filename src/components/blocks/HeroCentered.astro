@@ -19,7 +19,7 @@ const imageUrl = urlFor(block.image).width(1920).height(isFeatureHero ? 900 : 60
 ---
 
 <section class={isFeatureHero ? 'home-hero' : 'hero'}>
-  <img src={imageUrl} alt={block.image.alt} class="hero-bg-img" />
+  <img src={imageUrl} alt="" class="hero-bg-img" />
   <div class="hero-overlay"></div>
   {isFeatureHero ? (
     <div class="hero-content">
@@ -37,7 +37,7 @@ const imageUrl = urlFor(block.image).width(1920).height(isFeatureHero ? 900 : 60
               rel={isExternal(action.link) ? 'noopener' : undefined}
             >
               {action.link.label}
-            </a>
+            {isExternal(action.link) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
           ))}
         </div>
       )}

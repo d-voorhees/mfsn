@@ -2,14 +2,18 @@
 import { urlFor } from '../../lib/sanity';
 import { renderPortableText } from '../../lib/portableText';
 import { resolveHref, isExternal } from '../../lib/link';
-import { backgroundStyle, NARROW_COLUMN_CLASS } from '../../lib/sectionSettings';
+import { backgroundStyle, paddingClass, NARROW_COLUMN_CLASS } from '../../lib/sectionSettings';
 import type { RichTextSectionBlock } from '../../types/sanity';
 
 interface Props {
   block: RichTextSectionBlock;
+  // True when this section's heading is the page's only possible <h1>
+  // (a page with no hero block, e.g. the legal pages).
+  asPageTitle?: boolean;
 }
 
-const { block } = Astro.props;
+const { block, asPageTitle = false } = Astro.props;
+const Heading = asPageTitle ? 'h1' : 'h2';
 const settings = block.settings ?? {};
 const isNarrow = settings.width === 'narrow';
 const isSpotlight = block.proseStyle === 'spotlight';
@@ -26,7 +30,7 @@ const bodyWrapperClass =
   block.proseStyle === 'quote' ? 'vision-quote' : block.proseStyle === 'lead' ? 'intro-line' : isSpotlight ? 'navigator-intro' : undefined;
 ---
 
-<section id={settings.anchorId || undefined} style={backgroundStyle(settings)}>
+<section id={settings.anchorId || undefined} class={paddingClass(settings)} style={backgroundStyle(settings)}>
   <div class="container">
     <div class={isNarrow ? 'row' : undefined}>
       <div class={[isNarrow ? NARROW_COLUMN_CLASS : '', settings.alignment === 'center' ? 'text-center' : ''].filter(Boolean).join(' ') || undefined}>
@@ -40,7 +44,7 @@ const bodyWrapperClass =
               />
             )}
             {block.eyebrow && <div class="section-eyelash">{block.eyebrow}</div>}
-            {block.heading && <h2 class="navigator-title">{block.heading}</h2>}
+            {block.heading && <Heading class={asPageTitle ? 'navigator-title page-title-h2' : 'navigator-title'}>{block.heading}</Heading>}
             <div class={bodyWrapperClass}>
               <Fragment set:html={bodyHtml} />
             </div>
@@ -60,7 +64,7 @@ const bodyWrapperClass =
                     rel={isExternal(action.link) ? 'noopener' : undefined}
                   >
                     {action.link.label}
-                  </a>
+                  {isExternal(action.link) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
                 ))}
               </div>
             )}
@@ -75,12 +79,12 @@ const bodyWrapperClass =
               />
             )}
             {block.eyebrow && <div class="section-eyelash">{block.eyebrow}</div>}
-            {block.heading && <h2>{block.heading}</h2>}
+            {block.heading && <Heading class={asPageTitle ? 'page-title-h2' : undefined}>{block.heading}</Heading>}
             {block.columns && block.columns.length > 0 ? (
               <div class="row g-5 navigator-outcomes">
                 {block.columns.map((col) => (
                   <div class="col-md-6">
-                    {col.headingText && (col.headingTag === 'h3' ? <h3>{col.headingText}</h3> : <h4>{col.headingText}</h4>)}
+                    {col.headingText && <h3 class={col.headingTag === 'h4' ? 'h4' : undefined}>{col.headingText}</h3>}
                     <Fragment set:html={renderPortableText(col.body)} />
                   </div>
                 ))}
@@ -106,7 +110,7 @@ const bodyWrapperClass =
                     rel={isExternal(action.link) ? 'noopener' : undefined}
                   >
                     {action.link.label}
-                  </a>
+                  {isExternal(action.link) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
                 ))}
               </div>
             )}

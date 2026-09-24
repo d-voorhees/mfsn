@@ -21,7 +21,7 @@ const { block } = Astro.props;
                 {partner.logo && <img src={urlFor(partner.logo).width(300).url()} alt={`${partner.name} logo`} loading="lazy" />}
               </div>
               <span class="partner-name">{partner.name}</span>
-            </a>
+            <span class="visually-hidden"> (opens in a new tab)</span></a>
           ) : (
             <div class="partner-card no-link">
               <div class={`partner-logo-wrap${partner.logoOnDarkBg ? ' dark' : ''}`}>
@@ -41,7 +41,7 @@ const { block } = Astro.props;
       <div class="partner-logos">
         {block.partners.map((partner) =>
           partner.url ? (
-            <a class="partner-logo-chip" href={partner.url} target="_blank" rel="noopener">{partner.name}</a>
+            <a class="partner-logo-chip" href={partner.url} target="_blank" rel="noopener">{partner.name}<span class="visually-hidden"> (opens in a new tab)</span></a>
           ) : (
             <span class="partner-logo-chip">{partner.name}</span>
           )

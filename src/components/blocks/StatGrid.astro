@@ -34,7 +34,7 @@ const STAT_COLORS = ['stat-green', 'stat-orange', 'stat-pink', 'stat-blue'];
                 rel={isExternal(stat.link) ? 'noopener' : undefined}
               >
                 {stat.link.label} &rarr;
-              </a>
+              {isExternal(stat.link) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
             )}
           </>
         );
