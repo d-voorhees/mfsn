@@ -25,6 +25,10 @@ const { navigation, logo, siteName } = Astro.props;
 const dropdownGroups = navigation.filter((item) => item.dropdownItems && item.dropdownItems.length > 0);
 const panelId = (item: NavigationItemData) => `panel-${dropdownGroups.indexOf(item) + 1}`;
 const logoUrl = urlFor(logo).width(84).height(84).url();
+// The mobile menu uses the multicolor logo (the header bar uses the
+// single-color logo from siteSettings on the colored navbar).
+const mobileMenuLogoUrl =
+  'https://cdn.sanity.io/images/js71ru0h/production/0d98cfc2fd941f9bf44f21f8679307200700c574-886x804.png?w=200';
 ---
 
 <nav class="navbar-custom">
@@ -82,7 +86,7 @@ const logoUrl = urlFor(logo).width(84).height(84).url();
 <div class="mobile-menu" id="mobileMenu" data-active-panel="root" aria-hidden="true">
   <div class="mobile-menu-header">
     <a href="/" class="mobile-menu-brand">
-      <img src={logoUrl} alt={logo.alt} class="mobile-menu-logo" />
+      <img src={mobileMenuLogoUrl} alt={logo.alt} class="mobile-menu-logo" width="886" height="804" />
       <span>{siteName}</span>
     </a>
     <button class="mobile-menu-close" id="mobileMenuClose" type="button" aria-label="Close menu">
