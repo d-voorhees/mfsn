@@ -1,0 +1,40 @@
+---
+// Site search UI, rendered once by BaseLayout outside <main> so Pagefind
+// doesn't index it. Two layers, both driven by /site-search.js:
+//   1. a search bar overlay (input only) that drops over the current page
+//   2. a results modal, opened when the visitor submits the search
+---
+
+<div class="search-backdrop" id="searchBackdrop" hidden></div>
+
+<div class="search-bar-overlay" id="searchBar" role="dialog" aria-label="Search the site" hidden>
+  <form class="search-bar-form" id="searchForm" role="search" action="/search/" method="get">
+    <label for="searchInput" class="visually-hidden">Search the site</label>
+    <i class="bi bi-search search-bar-icon" aria-hidden="true"></i>
+    <input
+      type="search"
+      id="searchInput"
+      name="q"
+      placeholder="Search the site, then press Enter&hellip;"
+      autocomplete="off"
+    />
+    <button type="button" class="search-close" data-search-close aria-label="Close search">
+      <i class="bi bi-x-lg" aria-hidden="true"></i>
+    </button>
+  </form>
+</div>
+
+<div class="search-modal" id="searchModal" role="dialog" aria-modal="true" aria-labelledby="searchModalTitle" hidden>
+  <div class="search-modal-header">
+    <h2 id="searchModalTitle">Search results</h2>
+    <button type="button" class="search-close" data-search-close aria-label="Close search results">
+      <i class="bi bi-x-lg" aria-hidden="true"></i>
+    </button>
+  </div>
+  <div class="search-modal-body">
+    <p id="searchStatus" class="search-status" aria-live="polite"></p>
+    <div id="searchResults" class="search-results"></div>
+  </div>
+</div>
+
+<script src="/site-search.js" is:inline></script>
