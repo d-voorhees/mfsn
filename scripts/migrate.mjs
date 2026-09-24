@@ -2,10 +2,11 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { client } from './lib/sanityClient.mjs';
 import { image, reportMissing, SITE_ROOT } from './lib/uploadImage.mjs';
-import { CATEGORIES } from './data/categories.mjs';
+import { UPLOADS, hasUpload, uploadPath } from './data/uploads.mjs';
 import { NEWS_MENTIONS } from './data/newsMentions.mjs';
 import { NAVIGATION, FOOTER } from './data/siteSettings.mjs';
 import { buildPages } from './data/pages.mjs';
+import { SEO } from './data/seo.mjs';
 
 function assertSiteRootIsCorrect() {
   const canary = path.join(SITE_ROOT, 'img/mfsn-logo-white.png');
@@ -19,10 +20,22 @@ function assertSiteRootIsCorrect() {
 async function run() {
   assertSiteRootIsCorrect();
 
-  console.log('--- Migrating categories ---');
-  for (const cat of CATEGORIES) {
-    await client.createOrReplace({ _id: cat._id, _type: 'category', label: cat.label, colorKey: cat.colorKey });
-    console.log('  ✓', cat.label);
+  console.log('--- Migrating uploads ---');
+  for (const upload of UPLOADS) {
+    if (!hasUpload(upload._id)) {
+      console.log('  - skipped (file not found):', upload.file, '— add it in Studio → Uploads');
+      continue;
+    }
+    const asset = await client.assets.upload('file', fs.createReadStream(uploadPath(upload._id)), {
+      filename: path.basename(upload.file),
+    });
+    await client.createOrReplace({
+      _id: upload._id,
+      _type: 'uploadedFile',
+      title: upload.title,
+      file: { _type: 'file', asset: { _type: 'reference', _ref: asset._id } },
+    });
+    console.log('  ✓', upload.title);
   }
 
   console.log('\n--- Migrating news mentions ---');
@@ -74,7 +87,8 @@ async function run() {
     navigation: NAVIGATION,
     footer: FOOTER,
     defaultSeo: {
-      metaTitle: 'Manatee Food Security Network | Building a Stronger, Food-Secure Manatee County',
+      metaTitle: 'Manatee Food Security Network | Ending Hunger in Manatee',
+      metaDescription: SEO.home.metaDescription,
     },
   });
   console.log('  ✓ siteSettings');

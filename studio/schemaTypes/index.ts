@@ -1,7 +1,7 @@
 import page from './documents/page'
 import siteSettings from './documents/siteSettings'
 import newsMention from './documents/newsMention'
-import category from './documents/category'
+import uploadedFile from './documents/uploadedFile'
 
 import link from './objects/shared/link'
 import action from './objects/shared/action'
@@ -31,7 +31,7 @@ export const schemaTypes = [
   page,
   siteSettings,
   newsMention,
-  category,
+  uploadedFile,
 
   // Shared objects
   link,

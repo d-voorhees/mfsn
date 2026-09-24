@@ -10,7 +10,10 @@
     "build": "astro build && npm run index-search",
     "index-search": "pagefind --site dist --output-path dist/pagefind",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "push:content": "node scripts/apply-seo.mjs && node scripts/remove-categories.mjs",
+    "push:content:dry": "node scripts/apply-seo.mjs --dry-run && node scripts/remove-categories.mjs --dry-run",
+    "push:studio": "cd studio && npx sanity deploy"
   },
   "dependencies": {
     "@portabletext/to-html": "^6.0.0",

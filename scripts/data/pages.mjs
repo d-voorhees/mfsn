@@ -2,6 +2,8 @@ import { key } from '../lib/key.mjs';
 import { action, extLink, intLink } from '../lib/fields.mjs';
 import { paragraphs, bulletList, numberedList, heading } from '../lib/portableText.mjs';
 import { image } from '../lib/uploadImage.mjs';
+import { SEO } from './seo.mjs';
+import { fileLinkFor, hasUpload } from './uploads.mjs';
 import { NETWORK_PARTNERS, UNITE_US_PARTNERS } from './partners.mjs';
 
 const hero = async ({ heading: h, subheading, description, imgFile, imgAlt, actions, eyebrow }) => ({
@@ -100,12 +102,16 @@ const pullQuote = ({ quote, citationName, citationDetail }) => ({
   citationDetail,
 });
 
-const resourceLinkList = (links) => links.map(({ label, url }) => ({ _type: 'link', _key: key('link'), label, externalUrl: url }));
+const resourceLinkList = (links) =>
+  links.map(({ label, url, uploadId }) => ({
+    _type: 'link',
+    _key: key('link'),
+    ...(uploadId ? fileLinkFor(label, uploadId) : { label, externalUrl: url }),
+  }));
 
-const resourceSpotlight = async ({ tags, heading: h, subheading, imgFile, imgAlt, mediaPosition = 'left', body, resourceLinks, settings }) => ({
+const resourceSpotlight = async ({ heading: h, subheading, imgFile, imgAlt, mediaPosition = 'left', body, resourceLinks, settings }) => ({
   _type: 'resourceSpotlight',
   _key: key('spotlight'),
-  tags: tags.map((id) => ({ _type: 'reference', _ref: id, _key: key('tagref') })),
   heading: h,
   subheading,
   media: imgFile ? await image(imgFile, imgAlt) : undefined,
@@ -198,7 +204,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Manatee Food Security Network',
     slug: { _type: 'slug', current: 'home' },
-    seo: { metaTitle: 'Manatee Food Security Network | Building a Stronger, Food-Secure Manatee County' },
+    seo: SEO['home'],
     pageBuilder: [
       await hero({
         heading: 'Building a Stronger, Food-Secure Manatee County',
@@ -432,7 +438,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Our Network',
     slug: { _type: 'slug', current: 'our-network' },
-    seo: { metaTitle: 'Our Network | Manatee Food Security Network' },
+    seo: SEO['our-network'],
     pageBuilder: [
       await hero({ heading: 'Our Network', imgFile: 'img/our-network.jpeg', imgAlt: 'Manatee Food Security Network partners' }),
       richText({
@@ -450,7 +456,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Our Leadership',
     slug: { _type: 'slug', current: 'leadership' },
-    seo: { metaTitle: 'Our Leadership | Manatee Food Security Network' },
+    seo: SEO['leadership'],
     pageBuilder: [
       await hero({ heading: 'Support Team', imgFile: 'img/leadership-hero.jpg', imgAlt: 'Manatee Food Security Network team having a conversation' }),
       await teamGrid({
@@ -471,7 +477,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Steering Committee',
     slug: { _type: 'slug', current: 'steering-committee' },
-    seo: { metaTitle: 'Steering Committee | Manatee Food Security Network' },
+    seo: SEO['steering-committee'],
     pageBuilder: [
       await hero({ heading: 'Steering Committee', imgFile: 'img/steering-committee.jpg', imgAlt: 'Steering Committee presentation at a network convening' }),
       richText({
@@ -526,7 +532,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Member Connection',
     slug: { _type: 'slug', current: 'member-connection' },
-    seo: { metaTitle: 'Member Connection | Manatee Food Security Network' },
+    seo: SEO['member-connection'],
     pageBuilder: [
       await hero({ heading: 'Connect. Coordinate. Collaborate.', imgFile: 'img/our-network.jpeg', imgAlt: 'Manatee Food Security Network partners' }),
       richText({
@@ -571,7 +577,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Meeting Documents',
     slug: { _type: 'slug', current: 'meeting-documents' },
-    seo: { metaTitle: 'Meeting Documents | Manatee Food Security Network' },
+    seo: SEO['meeting-documents'],
     pageBuilder: [
       await hero({ heading: 'Meeting Documents', imgFile: 'img/meeting-documents.jpg', imgAlt: 'Meeting documents' }),
       await textImage({
@@ -587,7 +593,7 @@ export async function buildPages() {
           { _type: 'link', _key: key('link'), label: '2024', externalUrl: 'https://drive.google.com/drive/folders/115uKCI-mxhy3d4fG94B5aSWNh2DdkjLf' },
           { _type: 'link', _key: key('link'), label: '2023', externalUrl: 'https://drive.google.com/drive/folders/17oNbAe30N8xkSlTUOgbmuOkR1F-A-qdQ' },
           { _type: 'link', _key: key('link'), label: 'Download logos', externalUrl: 'https://www.manateefood.org/our-network/meeting-documents/logo' },
-          { _type: 'link', _key: key('link'), label: 'Who We Are Graphic', externalUrl: 'https://www.manateefood.org/uploads/who-we-are-mfsn-2026.pdf' },
+          ...(hasUpload('upload.who-we-are-mfsn-2026') ? [{ _type: 'link', _key: key('link'), ...fileLinkFor('Who We Are Graphic', 'upload.who-we-are-mfsn-2026') }] : []),
         ],
       }),
     ],
@@ -599,7 +605,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'In the News',
     slug: { _type: 'slug', current: 'in-the-news' },
-    seo: { metaTitle: 'In the News | Manatee Food Security Network' },
+    seo: SEO['in-the-news'],
     pageBuilder: [
       await hero({ heading: 'In the News', imgFile: 'img/in-the-news.jpg', imgAlt: 'Manatee Food Security Network in the news' }),
       newsGrid({
@@ -621,7 +627,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Our Strategy',
     slug: { _type: 'slug', current: 'our-strategy' },
-    seo: { metaTitle: 'Our Strategy | Manatee Food Security Network' },
+    seo: SEO['our-strategy'],
     pageBuilder: [
       await hero({ heading: 'Our Strategy', imgFile: 'img/market-2-jodi-carroll.jpeg', imgAlt: 'Shoppers browsing a street farmers market, with fresh peppers and cucumbers in the foreground' }),
       featureGrid({
@@ -689,7 +695,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Talking Points',
     slug: { _type: 'slug', current: 'talking-points' },
-    seo: { metaTitle: 'Talking Points | Manatee Food Security Network' },
+    seo: SEO['talking-points'],
     pageBuilder: [
       await hero({ heading: 'Talking Points', imgFile: 'img/carlo-mfsn.jpg', imgAlt: 'Manatee Food Security Network partners at a convening' }),
       richText({
@@ -729,7 +735,7 @@ export async function buildPages() {
           'Fast facts on hunger in Manatee County as of November 2025 with links to USDA reports and local survival budgets.',
           'This informational sheet is helpful to know and use when speaking about hunger in Manatee County.',
         ),
-        actions: [action('primary', extLink('Download Fast Facts (PDF)', '/uploads/data-around-food-costs-september-2026.pdf'))],
+        actions: hasUpload('upload.data-around-food-costs-september-2026') ? [action('primary', fileLinkFor('Download Fast Facts (PDF)', 'upload.data-around-food-costs-september-2026'))] : [],
         settings: { background: 'tinted', alignment: 'center', width: 'narrow', anchorId: 'fast-facts-hunger' },
       }),
     ],
@@ -741,7 +747,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Data & Mapping',
     slug: { _type: 'slug', current: 'data-mapping' },
-    seo: { metaTitle: 'Data & Mapping | Manatee Food Security Network' },
+    seo: SEO['data-mapping'],
     pageBuilder: [
       await hero({ heading: 'Data & Mapping', imgFile: 'img/data-mapping-bg.jpg', imgAlt: 'Manatee Food Security Network' }),
       richText({
@@ -789,7 +795,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Unite Us',
     slug: { _type: 'slug', current: 'unite-us' },
-    seo: { metaTitle: 'Unite Us | Manatee Food Security Network' },
+    seo: SEO['unite-us'],
     pageBuilder: [
       await hero({ heading: 'Unite Us', subheading: 'Referral Program', imgFile: 'img/one-more-child-tour-6-23-26.jpg', imgAlt: 'Volunteer delivering food assistance to a family' }),
       await textImage({
@@ -819,7 +825,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Working Groups',
     slug: { _type: 'slug', current: 'working-groups' },
-    seo: { metaTitle: 'Working Groups | Manatee Food Security Network' },
+    seo: SEO['working-groups'],
     pageBuilder: [
       await hero({ heading: 'Working Groups', subheading: 'Cooperative Distribution Group', imgFile: 'img/working-group.jpg', imgAlt: 'A bin of pumpkins recovered for distribution' }),
       richText({
@@ -850,7 +856,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Find Food Now',
     slug: { _type: 'slug', current: 'find-food-now' },
-    seo: { metaTitle: 'Find Food Now | Manatee Food Security Network' },
+    seo: SEO['find-food-now'],
     pageBuilder: [
       await hero({ heading: 'Find Food Now', imgFile: 'img/cucumbers.jpeg', imgAlt: 'Fresh produce at a Manatee County food distribution' }),
       featureGrid({
@@ -882,7 +888,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Privacy Policy',
     slug: { _type: 'slug', current: 'privacy-policy' },
-    seo: { metaTitle: 'Privacy Policy | Manatee Food Security Network', noIndex: true },
+    seo: SEO['privacy-policy'],
     pageBuilder: [
       richText({
         heading: 'Privacy Policy',
@@ -919,7 +925,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Terms of Service',
     slug: { _type: 'slug', current: 'terms-of-service' },
-    seo: { metaTitle: 'Terms of Service | Manatee Food Security Network', noIndex: true },
+    seo: SEO['terms-of-service'],
     pageBuilder: [
       richText({
         heading: 'Terms of Service',
@@ -1005,7 +1011,7 @@ export async function buildPages() {
     _type: 'page',
     title: 'Creating Safe Spaces',
     slug: { _type: 'slug', current: 'resources' },
-    seo: { metaTitle: 'Creating Safe Spaces | Manatee Food Security Network' },
+    seo: SEO['resources'],
     pageBuilder: [
       await hero({ heading: 'Creating Safe Spaces', imgFile: 'img/resources-hero.jpg', imgAlt: 'Manatee Food Security Network partners and community members' }),
       richText({
@@ -1015,7 +1021,6 @@ export async function buildPages() {
         ),
       }),
       await resourceSpotlight({
-        tags: ['category.accessibility', 'category.best-practices'],
         heading: 'Accessibility for Every Body',
         imgFile: 'img/resources-1.jpg',
         imgAlt: 'Community member',
@@ -1035,7 +1040,6 @@ export async function buildPages() {
         settings: { anchorId: 'accessibility' },
       }),
       await resourceSpotlight({
-        tags: ['category.dei-inclusion', 'category.best-practices'],
         heading: 'Building Belonging',
         imgFile: 'img/resources-2.png',
         imgAlt: 'Building Belonging Course Guide — Best Practices for Inclusive Food Pantries',
@@ -1057,7 +1061,6 @@ export async function buildPages() {
         settings: { anchorId: 'building-belonging' },
       }),
       await resourceSpotlight({
-        tags: ['category.youth-families'],
         heading: 'Feeding our Youth',
         imgFile: 'img/food-kids.jpg',
         imgAlt: 'Kids enjoying a meal',
@@ -1071,7 +1074,6 @@ export async function buildPages() {
         settings: { anchorId: 'feeding-youth' },
       }),
       await resourceSpotlight({
-        tags: ['category.immigrant-community'],
         heading: 'UnidosNow',
         subheading: 'Build a welcoming space for immigrants',
         imgFile: 'img/UnidosNow_Logo_TagLine.png',
@@ -1087,7 +1089,6 @@ export async function buildPages() {
         settings: { anchorId: 'unidosnow' },
       }),
       await resourceSpotlight({
-        tags: ['category.homeless-unhoused', 'category.best-practices'],
         heading: 'Homeless Education 101',
         imgFile: 'img/partner logos/turning-points.gif',
         imgAlt: 'Turning Points — Where Compassion Takes Action',
@@ -1106,7 +1107,6 @@ export async function buildPages() {
         settings: { anchorId: 'homeless-education' },
       }),
       await resourceSpotlight({
-        tags: ['category.immigrant-community', 'category.legal-rights'],
         heading: 'Immigrant Legal Resource Center',
         subheading: 'Red Cards / Tarjetas Rojas',
         imgFile: 'img/immigrant-legal-resource-center.png',
@@ -1120,7 +1120,6 @@ export async function buildPages() {
         settings: { anchorId: 'immigrant-legal' },
       }),
       await resourceSpotlight({
-        tags: ['category.substance-abuse-recovery'],
         heading: 'Feeding Those in Active Addiction (Substance Abuse Disorder)',
         imgFile: 'img/active-addiction.jpg',
         imgAlt: 'Fresh tomatoes and produce',
@@ -1147,7 +1146,6 @@ export async function buildPages() {
         settings: { anchorId: 'active-addiction' },
       }),
       await resourceSpotlight({
-        tags: ['category.seniors-elderly', 'category.best-practices'],
         heading: 'Seniors Struggling with Hunger',
         imgFile: 'img/seniors-walking.jpg',
         imgAlt: 'Seniors walking together',
@@ -1180,7 +1178,6 @@ export async function buildPages() {
         settings: { anchorId: 'seniors-hunger' },
       }),
       await resourceSpotlight({
-        tags: ['category.veterans-military-families'],
         heading: 'Serving Those Who Served',
         imgFile: 'img/serving-those-who-served.JPG',
         imgAlt: 'Patriotic-themed veterans outreach van',
@@ -1201,7 +1198,6 @@ export async function buildPages() {
         settings: { anchorId: 'veterans' },
       }),
       await resourceSpotlight({
-        tags: ['category.client-dignity'],
         heading: 'Supporting Client Choice',
         imgFile: 'img/client-choice.png',
         imgAlt: 'Power Up Your Pantry — Supporting Client Choice guide',
@@ -1219,7 +1215,6 @@ export async function buildPages() {
         settings: { anchorId: 'client-choice' },
       }),
       await resourceSpotlight({
-        tags: ['category.data-on-food-prices'],
         heading: 'Fast Facts: Food Prices and Hunger',
         imgFile: 'img/peppers.jpg',
         imgAlt: 'Fast Facts: Food Prices and Hunger',
@@ -1228,7 +1223,7 @@ export async function buildPages() {
           'Fast facts on hunger in Manatee County as of September 2026 with links to USDA reports and local survival budgets.',
           'This informational sheet is helpful to know and use when speaking about hunger in Manatee County.',
         ),
-        resourceLinks: [{ label: 'Download Fast Facts', url: '/uploads/data-around-food-costs-september-2026.pdf' }],
+        resourceLinks: hasUpload('upload.data-around-food-costs-september-2026') ? [{ label: 'Download Fast Facts', uploadId: 'upload.data-around-food-costs-september-2026' }] : undefined,
         settings: { anchorId: 'fast-facts-hunger' },
       }),
     ],

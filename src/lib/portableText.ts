@@ -6,10 +6,27 @@ import type { PortableTextBlock } from '../types/sanity';
 // standing constraint that Portable Text must go through a safe renderer.
 export function renderPortableText(blocks?: PortableTextBlock[], options?: { listClass?: string }): string {
   if (!blocks || blocks.length === 0) return '';
-  return toHTML(
-    blocks as never,
-    options?.listClass
-      ? { components: { list: { bullet: ({ children }) => `<ul class="${options.listClass}">${children}</ul>` } } }
-      : undefined,
-  );
+  const listClass = options?.listClass;
+  return toHTML(blocks as never, {
+    components: {
+      ...(listClass
+        ? { list: { bullet: ({ children }) => `<ul class="${listClass}">${children}</ul>` } }
+        : {}),
+      marks: {
+        // "Link to a page": queries.ts resolves the reference to a slug.
+        internalLink: ({ children, value }) => {
+          const slug = value?.slug;
+          if (!slug) return children;
+          return `<a href="${slug === 'home' ? '/' : `/${slug}/`}">${children}</a>`;
+        },
+        // "Link to an upload": queries.ts resolves the reference to the
+        // file's CDN URL. Opens in a new tab so a PDF doesn't replace the page.
+        fileLink: ({ children, value }) => {
+          const url = value?.url;
+          if (!url) return children;
+          return `<a href="${url}" target="_blank" rel="noopener">${children}</a>`;
+        },
+      },
+    },
+  });
 }

@@ -24,6 +24,9 @@ const metaTitle = seo?.metaTitle || siteSettings.defaultSeo?.metaTitle || title;
 const metaDescription = seo?.metaDescription || siteSettings.defaultSeo?.metaDescription;
 const shareImage = seo?.shareImage || siteSettings.defaultSeo?.shareImage;
 const noIndex = seo?.noIndex ?? false;
+// Canonical URLs need the deployed origin; set `site` in astro.config.mjs
+// and they appear automatically (skipped, not guessed, while it's unset).
+const canonicalUrl = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 ---
 
 <!DOCTYPE html>
@@ -33,6 +36,13 @@ const noIndex = seo?.noIndex ?? false;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{metaTitle}</title>
     {metaDescription && <meta name="description" content={metaDescription} />}
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteSettings.siteName} />
+    <meta property="og:title" content={metaTitle} />
+    {metaDescription && <meta property="og:description" content={metaDescription} />}
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    <meta name="twitter:card" content={shareImage ? 'summary_large_image' : 'summary'} />
     {noIndex && <meta name="robots" content="noindex" />}
     {shareImage && <meta property="og:image" content={urlFor(shareImage).width(1200).url()} />}
 

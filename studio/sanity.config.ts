@@ -28,8 +28,10 @@ export default defineConfig({
               .id('siteSettings')
               .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
             S.divider(),
+            S.documentTypeListItem('uploadedFile').title('Uploads (PDFs & documents)'),
+            S.divider(),
             ...S.documentTypeListItems().filter(
-              (listItem) => !SINGLETON_TYPES.has(listItem.getId() ?? ''),
+              (listItem) => !SINGLETON_TYPES.has(listItem.getId() ?? '') && listItem.getId() !== 'uploadedFile',
             ),
           ]),
     }),

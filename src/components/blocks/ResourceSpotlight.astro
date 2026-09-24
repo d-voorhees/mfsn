@@ -26,11 +26,6 @@ const reversed = block.mediaPosition === 'right';
         {block.media && <img src={urlFor(block.media).width(600).url()} alt={block.media.alt} />}
       </div>
       <div class="col-md-8 resource-content">
-        <div class="resource-tags">
-          {block.tags.map((tag) => (
-            <span class={`tag-pill tag-${tag.colorKey}`}>{tag.label}</span>
-          ))}
-        </div>
         <h2>{block.heading}</h2>
         {block.subheading && <h3 class="subhead">{block.subheading}</h3>}
         <Fragment set:html={bodyHtml} />

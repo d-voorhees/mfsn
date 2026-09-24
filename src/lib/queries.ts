@@ -8,6 +8,7 @@ import type { PageData, SiteSettingsData } from '../types/sanity';
 const LINK_PROJECTION = `
   label,
   internalLink->{slug},
+  "fileUrl": file->file.asset->url,
   externalUrl
 `;
 
@@ -47,6 +48,7 @@ const RESOLVED_LINK = (path: string) => `
   "${path}": ${path}{
     label,
     internalLink->{slug},
+    "fileUrl": file->file.asset->url,
     externalUrl
   }
 `;
@@ -57,6 +59,18 @@ const RESOLVED_LINK = (path: string) => `
 // This is verbose but explicit: every nested reference this project's
 // components actually read is resolved here, and nothing is silently left
 // as a raw {_ref} for a component to mishandle.
+// Portable Text link annotations that point at other documents (a page or
+// an upload) are stored as references; resolve them to a slug / file URL so
+// portableText.ts can render them as plain hrefs.
+const BODY_PROJECTION = `body[]{
+    ...,
+    markDefs[]{
+      ...,
+      _type == "internalLink" => {"slug": page->slug.current},
+      _type == "fileLink" => {"url": upload->file.asset->url}
+    }
+  }`;
+
 const PAGE_BUILDER_PROJECTION = `
   pageBuilder[]{
     ...,
@@ -64,15 +78,19 @@ const PAGE_BUILDER_PROJECTION = `
       "actions": actions[]{..., ${RESOLVED_LINK('link')}}
     },
     _type == "richTextSection" => {
+      "body": ${BODY_PROJECTION},
+      "columns": columns[]{..., "body": ${BODY_PROJECTION}},
       "actions": actions[]{..., ${RESOLVED_LINK('link')}}
     },
     _type == "textImageSection" => {
+      "body": ${BODY_PROJECTION},
       "actions": actions[]{..., ${RESOLVED_LINK('link')}},
-      "linkList": linkList[]{label, internalLink->{slug}, externalUrl}
+      "linkList": linkList[]{label, internalLink->{slug}, "fileUrl": file->file.asset->url, externalUrl}
     },
     _type == "twoColumnImageSection" => {
       "columns": columns[]{
         ...,
+        "body": ${BODY_PROJECTION},
         "actions": actions[]{..., ${RESOLVED_LINK('link')}}
       }
     },
@@ -87,8 +105,8 @@ const PAGE_BUILDER_PROJECTION = `
       "stats": stats[]{..., ${RESOLVED_LINK('link')}}
     },
     _type == "resourceSpotlight" => {
-      "tags": tags[]->{_id, label, colorKey},
-      "resourceLinks": resourceLinks[]{label, internalLink->{slug}, externalUrl}
+      "body": ${BODY_PROJECTION},
+      "resourceLinks": resourceLinks[]{label, internalLink->{slug}, "fileUrl": file->file.asset->url, externalUrl}
     },
     _type == "newsGrid" => {
       "mentions": mentions[]->{_id, headline, outletName, outletLogo, excerpt, byline, citation, url, linkLabel, featured, publishedAt},
@@ -99,7 +117,7 @@ const PAGE_BUILDER_PROJECTION = `
 
 // Fetches one page by slug with its full pageBuilder array in authored
 // order, every internal link resolved to a slug, and every reference
-// (resourceSpotlight's tags, newsGrid's mentions) dereferenced to the
+// (newsGrid's mentions) dereferenced to the
 // fields their components actually render. Used by every page route —
 // see src/pages/**.
 export async function getPageBySlug(slug: string): Promise<PageData | null> {

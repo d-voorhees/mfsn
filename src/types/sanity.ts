@@ -32,6 +32,7 @@ export interface SectionSettings {
 export interface LinkData {
   label: string
   internalLink?: {slug: {current: string}}
+  fileUrl?: string
   externalUrl?: string
 }
 
@@ -68,12 +69,6 @@ export interface SiteSettingsData {
     legalLinks?: LinkData[]
   }
   defaultSeo?: SeoData
-}
-
-export interface CategoryData {
-  _id: string
-  label: string
-  colorKey: 'blue' | 'orange' | 'pink' | 'green'
 }
 
 export interface NewsMentionData {
@@ -238,7 +233,6 @@ export interface PullQuoteBlock {
 export interface ResourceSpotlightBlock {
   _type: 'resourceSpotlight'
   _key: string
-  tags: CategoryData[]
   heading: string
   subheading?: string
   media?: SanityImage

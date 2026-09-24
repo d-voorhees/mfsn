@@ -8,9 +8,10 @@ export function resolveHref(link?: LinkData): string {
     const slug = link.internalLink.slug.current;
     return slug === 'home' ? '/' : `/${slug}/`;
   }
+  if (link.fileUrl) return link.fileUrl;
   return link.externalUrl ?? '#';
 }
 
 export function isExternal(link?: LinkData): boolean {
-  return Boolean(link?.externalUrl) && !link?.internalLink;
+  return Boolean(link?.externalUrl || link?.fileUrl) && !link?.internalLink;
 }

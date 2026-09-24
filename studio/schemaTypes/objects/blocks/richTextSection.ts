@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {bodyBlock} from '../shared/bodyBlock'
 
 // For standalone narrative/policy/list content that is NOT paired with a
 // dedicated image (Vision, Steering Committee's governance blocks, Talking
@@ -38,7 +39,7 @@ export default defineType({
       name: 'body',
       title: 'Body',
       type: 'array',
-      of: [{type: 'block'}],
+      of: [bodyBlock],
       description: 'Leave empty when using "Columns" below instead for a two-column heading+list layout.',
       validation: (rule) => rule.required(),
     }),
@@ -65,7 +66,7 @@ export default defineType({
               name: 'body',
               title: 'Body',
               type: 'array',
-              of: [{type: 'block'}],
+              of: [bodyBlock],
               validation: (rule) => rule.required(),
             }),
           ],

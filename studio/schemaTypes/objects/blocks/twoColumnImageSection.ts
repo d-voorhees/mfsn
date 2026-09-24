@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {bodyBlock} from '../shared/bodyBlock'
 
 // Built specifically for Our Strategy's "2026 Focus" section: two focus
 // areas presented side by side, each with its own heading, image, and body
@@ -39,7 +40,7 @@ export default defineType({
               name: 'body',
               title: 'Body',
               type: 'array',
-              of: [{type: 'block'}],
+              of: [bodyBlock],
               validation: (rule) => rule.required(),
             }),
             defineField({

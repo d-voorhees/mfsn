@@ -1,4 +1,5 @@
 import {defineField, defineType} from 'sanity'
+import {bodyBlock} from '../shared/bodyBlock'
 
 export default defineType({
   name: 'textImageSection',
@@ -35,7 +36,7 @@ export default defineType({
       },
       initialValue: 'default',
     }),
-    defineField({name: 'body', title: 'Body', type: 'array', of: [{type: 'block'}]}),
+    defineField({name: 'body', title: 'Body', type: 'array', of: [bodyBlock]}),
     defineField({name: 'image', title: 'Image', type: 'imageWithAlt'}),
     defineField({
       name: 'imageStyle',

@@ -28,8 +28,7 @@ import NewsGrid from './blocks/NewsGrid.astro';
 import LogoCloud from './blocks/LogoCloud.astro';
 import TeamGrid from './blocks/TeamGrid.astro';
 import NewsletterSignup from './blocks/NewsletterSignup.astro';
-import ResourceTagNav from './blocks/ResourceTagNav.astro';
-import type { PageBlock, ResourceSpotlightBlock } from '../types/sanity';
+import type { PageBlock } from '../types/sanity';
 
 interface Props {
   blocks?: PageBlock[];
@@ -37,23 +36,9 @@ interface Props {
 
 const { blocks = [] } = Astro.props;
 
-// The "Resource Topics" jump-nav isn't its own Sanity block — it's
-// computed from every resourceSpotlight block on the page (see
-// ResourceTagNav.astro) and rendered once, right before the first one.
-const resourceSpotlightBlocks = blocks.filter((b): b is ResourceSpotlightBlock => b._type === 'resourceSpotlight');
-const firstResourceSpotlight = resourceSpotlightBlocks[0];
 ---
 
 {blocks.map((block) => {
-  if (block === firstResourceSpotlight) {
-    return (
-      <>
-        <ResourceTagNav blocks={resourceSpotlightBlocks} />
-        <ResourceSpotlight block={block} />
-      </>
-    );
-  }
-
   switch (block._type) {
     case 'heroCentered':
       return <HeroCentered block={block} />;

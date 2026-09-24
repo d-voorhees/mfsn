@@ -1,23 +1,16 @@
 import {defineField, defineType} from 'sanity'
+import {bodyBlock} from '../shared/bodyBlock'
 
 // Distinct from textImageSection despite the similar media+text look: this
-// block requires a tags array (which also drives the page's tag navigation)
-// and a repeatable resource-links list, neither of which textImageSection
-// has. That's a genuine information-architecture difference, not styling.
+// block carries a repeatable resource-links list, which textImageSection
+// does not have.
 export default defineType({
   name: 'resourceSpotlight',
   title: 'Resource Spotlight',
   type: 'object',
   description:
-    'A tagged resource entry: media, heading, body copy, and a list of resource links. Used for the Resources & Safe Spaces topic library.',
+    'A resource entry: media, heading, body copy, and a list of resource links. Used for the Resources & Safe Spaces library.',
   fields: [
-    defineField({
-      name: 'tags',
-      title: 'Tags',
-      type: 'array',
-      of: [{type: 'reference', to: [{type: 'category'}]}],
-      validation: (rule) => rule.required().min(1),
-    }),
     defineField({name: 'heading', title: 'Heading', type: 'string', validation: (rule) => rule.required()}),
     defineField({name: 'subheading', title: 'Subheading', type: 'string'}),
     defineField({name: 'media', title: 'Media', type: 'imageWithAlt'}),
@@ -38,7 +31,7 @@ export default defineType({
       name: 'body',
       title: 'Body',
       type: 'array',
-      of: [{type: 'block'}],
+      of: [bodyBlock],
       validation: (rule) => rule.required(),
     }),
     defineField({
