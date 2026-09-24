@@ -2345,3 +2345,26 @@ body.search-open { overflow: hidden; }
 @media (max-width: 1024px) {
   .nav-search-mobile { display: inline-flex; align-items: center; flex-shrink: 0; }
 }
+
+/* Plain rich-text section bodies: bulleted lists use the orange manatee icon */
+.rich-text-body ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 1rem;
+}
+
+.rich-text-body li {
+  position: relative;
+  padding-left: 1.3rem;
+  margin-bottom: 0.5rem;
+}
+
+.rich-text-body li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  width: 0.8em;
+  height: 0.8em;
+  background: var(--bullet-icon) center / contain no-repeat;
+}
