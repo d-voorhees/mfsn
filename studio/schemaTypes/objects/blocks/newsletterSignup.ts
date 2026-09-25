@@ -5,7 +5,7 @@ import {defineField, defineType} from 'sanity'
 // component, not in Sanity.
 export default defineType({
   name: 'newsletterSignup',
-  title: 'Newsletter Signup',
+  title: 'CTA: Newsletter Signup',
   type: 'object',
   description: 'An email capture prompt.',
   fields: [
@@ -19,6 +19,9 @@ export default defineType({
     }),
   ],
   preview: {
-    select: {title: 'heading'},
+    select: {heading: 'heading'},
+    prepare({heading}) {
+      return {title: 'CTA: Newsletter Signup', subtitle: heading}
+    },
   },
 })

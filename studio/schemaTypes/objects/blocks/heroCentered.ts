@@ -6,7 +6,7 @@ import {defineField, defineType} from 'sanity'
 // than a second hero type, since the DOM/CSS contract is identical.
 export default defineType({
   name: 'heroCentered',
-  title: 'Hero (Centered)',
+  title: 'Hero',
   type: 'object',
   description: 'Full-bleed image hero with a centered title. Used at the top of every page.',
   fields: [
@@ -29,6 +29,9 @@ export default defineType({
     }),
   ],
   preview: {
-    select: {title: 'heading', media: 'image'},
+    select: {heading: 'heading', media: 'image'},
+    prepare({heading, media}) {
+      return {title: 'Hero', subtitle: heading, media}
+    },
   },
 })

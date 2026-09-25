@@ -1,7 +1,7 @@
 ---
 import { urlFor } from '../../lib/sanity';
 import { resolveHref, isExternal } from '../../lib/link';
-import { backgroundStyle } from '../../lib/sectionSettings';
+import { backgroundStyle, paddingClass } from '../../lib/sectionSettings';
 import type { FeatureGridBlock, FeatureGridMarkerIconKey } from '../../types/sanity';
 
 interface Props {
@@ -45,11 +45,11 @@ const colSpanClass =
   block.columns === 'two' ? 'col-md-6' : block.columns === 'four' ? 'col-sm-6 col-lg-3' : 'col-sm-6 col-lg-4';
 ---
 
-<section id={settings.anchorId || undefined} style={backgroundStyle(settings)}>
+<section id={settings.anchorId || undefined} class={paddingClass(settings)} style={backgroundStyle(settings)}>
   <div class="container">
     {block.icon ? (
       <div class="partner-heading">
-        <img src={urlFor(block.icon).width(120).url()} alt={block.icon.alt} />
+        <img src={urlFor(block.icon).url()} alt={block.icon.alt} />
         {block.heading && <h2>{block.heading}</h2>}
       </div>
     ) : (
@@ -89,7 +89,7 @@ const colSpanClass =
               )}
               {block.markerStyle === 'logoImage' && item.markerImage && (
                 <div class="resource-card-logo">
-                  <img src={urlFor(item.markerImage).width(200).url()} alt={item.markerImage.alt} />
+                  <img src={urlFor(item.markerImage).url()} alt={item.markerImage.alt} loading="lazy" />
                 </div>
               )}
               <h3>{item.title}</h3>

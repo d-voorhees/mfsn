@@ -122,6 +122,9 @@ export default defineType({
       return true
     }),
   preview: {
-    select: {title: 'heading', media: 'image'},
+    select: {heading: 'heading', media: 'image'},
+    prepare({heading, media}) {
+      return {title: 'Text + Image Section', subtitle: heading, media}
+    },
   },
 })

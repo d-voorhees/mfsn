@@ -29,11 +29,6 @@ export default defineType({
           .warning('Descriptions over about 160 characters get cut off in search results.'),
     }),
     defineField({
-      name: 'shareImage',
-      title: 'Social share image',
-      type: 'imageWithAlt',
-    }),
-    defineField({
       name: 'noIndex',
       title: 'Hide from search engines',
       type: 'boolean',

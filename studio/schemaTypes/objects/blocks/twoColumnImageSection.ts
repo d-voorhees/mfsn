@@ -59,9 +59,9 @@ export default defineType({
     defineField({name: 'settings', title: 'Section settings', type: 'sectionSettings'}),
   ],
   preview: {
-    select: {title: 'heading'},
-    prepare({title}) {
-      return {title: title || 'Two-column image section'}
+    select: {heading: 'heading'},
+    prepare({heading}) {
+      return {title: 'Two-Column Image Section', subtitle: heading}
     },
   },
 })

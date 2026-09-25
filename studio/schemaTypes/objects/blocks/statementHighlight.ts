@@ -29,6 +29,9 @@ export default defineType({
     defineField({name: 'settings', title: 'Section settings', type: 'sectionSettings'}),
   ],
   preview: {
-    select: {title: 'heading'},
+    select: {heading: 'heading'},
+    prepare({heading}) {
+      return {title: 'Statement Highlight', subtitle: heading}
+    },
   },
 })

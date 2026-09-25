@@ -15,7 +15,7 @@ const { block } = Astro.props;
 // the CSS treatment from content rather than adding an unjustified variant
 // field to the schema.
 const isFeatureHero = Boolean(block.description);
-const imageUrl = urlFor(block.image).width(1920).height(isFeatureHero ? 900 : 600).fit('crop').url();
+const imageUrl = urlFor(block.image).url();
 ---
 
 <section class={isFeatureHero ? 'home-hero' : 'hero'}>

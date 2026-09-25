@@ -13,7 +13,7 @@ const { logo, footer } = Astro.props;
 
 <footer>
   <div class="footer-inner">
-    <img src={urlFor(logo).width(160).url()} alt={logo.alt} class="footer-logo" />
+    <img src={urlFor(logo).url()} alt={logo.alt} class="footer-logo" />
     <div class="footer-text">
       {(footer?.contactPhone || footer?.contactEmail || footer?.locationText) && (
         <div class="contact-line">

@@ -91,9 +91,17 @@ export default defineType({
     defineField({name: 'settings', title: 'Section settings', type: 'sectionSettings'}),
   ],
   preview: {
-    select: {title: 'heading'},
-    prepare({title}) {
-      return {title: title || 'Rich text section'}
+    select: {heading: 'heading', eyebrow: 'eyebrow', body: 'body', columns: 'columns.0.headingText'},
+    prepare({heading, eyebrow, body, columns}) {
+      // Sections often have no heading, so fall back to the first line of body text
+      // so two rich text blocks in the same page can be told apart.
+      const firstText = Array.isArray(body)
+        ? body
+            .find((b) => b?._type === 'block')
+            ?.children?.map((c: {text?: string}) => c.text || '')
+            .join('')
+        : ''
+      return {title: 'Rich Text', subtitle: heading || eyebrow || firstText || columns}
     },
   },
 })

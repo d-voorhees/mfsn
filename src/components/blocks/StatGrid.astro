@@ -1,6 +1,6 @@
 ---
 import { resolveHref, isExternal } from '../../lib/link';
-import { backgroundStyle } from '../../lib/sectionSettings';
+import { backgroundStyle, paddingClass } from '../../lib/sectionSettings';
 import type { StatGridBlock } from '../../types/sanity';
 
 interface Props {
@@ -14,7 +14,7 @@ const STAT_COLORS = ['stat-green', 'stat-orange', 'stat-pink', 'stat-blue'];
 ---
 
 <section
-  class="stats-section"
+  class={['stats-section', paddingClass(settings)].filter(Boolean).join(' ')}
   id={settings.anchorId || undefined}
   style={backgroundStyle(settings)}
 >

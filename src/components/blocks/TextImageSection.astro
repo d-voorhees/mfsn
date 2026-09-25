@@ -2,7 +2,7 @@
 import { urlFor } from '../../lib/sanity';
 import { renderPortableText } from '../../lib/portableText';
 import { resolveHref, isExternal } from '../../lib/link';
-import { backgroundStyle } from '../../lib/sectionSettings';
+import { backgroundStyle, paddingClass } from '../../lib/sectionSettings';
 import type { TextImageSectionBlock } from '../../types/sanity';
 
 interface Props {
@@ -32,6 +32,7 @@ const calloutFirst = callout?.position === 'left';
 ---
 
 <section
+  class={paddingClass(settings)}
   id={settings.anchorId || undefined}
   style={backgroundStyle(settings)}
 >
@@ -84,7 +85,7 @@ const calloutFirst = callout?.position === 'left';
       <div class={`row align-items-center g-5${imageFirst ? '' : ' flex-row-reverse'}`}>
         {block.mediaPosition !== 'none' && block.image && (
           <div class="col-lg-6">
-            <img src={urlFor(block.image).width(1000).url()} alt={block.image.alt} class={IMAGE_CLASS[block.imageStyle]} />
+            <img src={urlFor(block.image).url()} alt={block.image.alt} class={IMAGE_CLASS[block.imageStyle]} />
           </div>
         )}
         <div class={block.mediaPosition === 'none' ? 'col-12' : 'col-lg-6'}>

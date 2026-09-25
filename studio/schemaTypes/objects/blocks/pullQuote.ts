@@ -24,6 +24,9 @@ export default defineType({
     }),
   ],
   preview: {
-    select: {title: 'quote', subtitle: 'citationName'},
+    select: {quote: 'quote', name: 'citationName'},
+    prepare({quote, name}) {
+      return {title: 'Pull Quote', subtitle: quote || name}
+    },
   },
 })

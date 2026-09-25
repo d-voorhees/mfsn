@@ -19,7 +19,7 @@ const { block } = Astro.props;
         <div class="col-md-4 news-col">
           {mention.outletLogo && (
             <div class="news-logo">
-              <img src={urlFor(mention.outletLogo).width(160).url()} alt={mention.outletLogo.alt} />
+              <img src={urlFor(mention.outletLogo).url()} alt={mention.outletLogo.alt} />
             </div>
           )}
           <h3 class="news-headline">{mention.headline}</h3>

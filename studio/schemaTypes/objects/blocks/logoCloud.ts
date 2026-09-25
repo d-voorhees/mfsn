@@ -59,9 +59,9 @@ export default defineType({
     }),
   ],
   preview: {
-    select: {title: 'heading'},
-    prepare({title}) {
-      return {title: title || 'Logo cloud'}
+    select: {heading: 'heading'},
+    prepare({heading}) {
+      return {title: 'Logo Cloud', subtitle: heading}
     },
   },
 })

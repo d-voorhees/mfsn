@@ -2,7 +2,7 @@
 import { urlFor } from '../../lib/sanity';
 import { renderPortableText } from '../../lib/portableText';
 import { resolveHref, isExternal } from '../../lib/link';
-import { backgroundStyle } from '../../lib/sectionSettings';
+import { backgroundStyle, paddingClass } from '../../lib/sectionSettings';
 import type { ResourceSpotlightBlock } from '../../types/sanity';
 
 interface Props {
@@ -16,16 +16,23 @@ const reversed = block.mediaPosition === 'right';
 ---
 
 <section
-  class="resource-row"
+  class={['resource-row', paddingClass(settings)].filter(Boolean).join(' ')}
   id={settings.anchorId || undefined}
   style={backgroundStyle(settings)}
 >
   <div class="container">
     <div class={`row g-4${reversed ? ' flex-md-row-reverse' : ''}`}>
       <div class="col-md-4 resource-media">
-        {block.media && <img src={urlFor(block.media).width(600).url()} alt={block.media.alt} />}
+        {block.media && <img src={urlFor(block.media).url()} alt={block.media.alt} />}
       </div>
       <div class="col-md-8 resource-content">
+        {block.tags && block.tags.length > 0 && (
+          <div class="resource-tags">
+            {block.tags.map((tag) => (
+              <span class="tag-pill">{tag}</span>
+            ))}
+          </div>
+        )}
         <h2>{block.heading}</h2>
         {block.subheading && <h3 class="subhead">{block.subheading}</h3>}
         <Fragment set:html={bodyHtml} />

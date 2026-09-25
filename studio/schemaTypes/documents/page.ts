@@ -19,7 +19,6 @@ export default defineType({
       options: {source: 'title', maxLength: 96},
       validation: (rule) => rule.required(),
     }),
-    defineField({name: 'seo', title: 'SEO', type: 'seo'}),
     defineField({
       name: 'pageBuilder',
       title: 'Page content',
@@ -42,6 +41,7 @@ export default defineType({
         {type: 'newsletterSignup'},
       ],
     }),
+    defineField({name: 'seo', title: 'SEO', type: 'seo'}),
   ],
   preview: {
     select: {title: 'title', subtitle: 'slug.current'},

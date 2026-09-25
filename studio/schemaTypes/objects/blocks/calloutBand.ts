@@ -5,7 +5,7 @@ import {defineField, defineType} from 'sanity'
 // contract that's plausible to reuse for future program updates.
 export default defineType({
   name: 'calloutBand',
-  title: 'Callout Band',
+  title: 'CTA: Callout Band',
   type: 'object',
   description: 'A short labeled callout with a bold statement and supporting body text, color-coded.',
   fields: [
@@ -34,6 +34,9 @@ export default defineType({
     }),
   ],
   preview: {
-    select: {title: 'label', subtitle: 'statement'},
+    select: {label: 'label', statement: 'statement'},
+    prepare({label, statement}) {
+      return {title: 'CTA: Callout Band', subtitle: label || statement}
+    },
   },
 })

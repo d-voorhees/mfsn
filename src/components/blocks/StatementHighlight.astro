@@ -1,5 +1,5 @@
 ---
-import { backgroundStyle } from '../../lib/sectionSettings';
+import { backgroundStyle, paddingClass } from '../../lib/sectionSettings';
 import type { StatementHighlightBlock } from '../../types/sanity';
 
 interface Props {
@@ -12,7 +12,7 @@ const headingLines = block.heading.split('\n').filter(Boolean);
 ---
 
 <section
-  class="matters-section"
+  class={['matters-section', paddingClass(settings)].filter(Boolean).join(' ')}
   id={settings.anchorId || undefined}
   style={backgroundStyle(settings)}
 >

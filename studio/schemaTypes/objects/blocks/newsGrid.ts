@@ -25,6 +25,9 @@ export default defineType({
     }),
   ],
   preview: {
-    select: {title: 'heading'},
+    select: {heading: 'heading'},
+    prepare({heading}) {
+      return {title: 'News Grid', subtitle: heading}
+    },
   },
 })

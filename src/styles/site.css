@@ -2289,6 +2289,20 @@ body.search-open { overflow: hidden; }
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .search-modal {
+    top: 0;
+    left: 0;
+    transform: none;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
 .search-modal-header {
   display: flex;
   align-items: center;

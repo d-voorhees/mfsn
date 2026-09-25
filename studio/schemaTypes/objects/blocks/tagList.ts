@@ -33,5 +33,10 @@ export default defineType({
     }),
     defineField({name: 'settings', title: 'Section settings', type: 'sectionSettings'}),
   ],
-  preview: {select: {title: 'heading'}},
+  preview: {
+    select: {heading: 'heading'},
+    prepare({heading}) {
+      return {title: 'Tag List', subtitle: heading}
+    },
+  },
 })

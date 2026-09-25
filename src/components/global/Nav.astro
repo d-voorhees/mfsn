@@ -24,11 +24,11 @@ const { navigation, logo, siteName } = Astro.props;
 // dropdown group would need a matching CSS rule added.
 const dropdownGroups = navigation.filter((item) => item.dropdownItems && item.dropdownItems.length > 0);
 const panelId = (item: NavigationItemData) => `panel-${dropdownGroups.indexOf(item) + 1}`;
-const logoUrl = urlFor(logo).width(84).height(84).url();
+const logoUrl = urlFor(logo).url();
 // The mobile menu uses the multicolor logo (the header bar uses the
 // single-color logo from siteSettings on the colored navbar).
 const mobileMenuLogoUrl =
-  'https://cdn.sanity.io/images/js71ru0h/production/0d98cfc2fd941f9bf44f21f8679307200700c574-886x804.png?w=200';
+  'https://cdn.sanity.io/images/js71ru0h/production/0d98cfc2fd941f9bf44f21f8679307200700c574-886x804.png';
 ---
 
 <nav class="navbar-custom" aria-label="Main">

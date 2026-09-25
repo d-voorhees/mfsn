@@ -18,14 +18,14 @@ const { block } = Astro.props;
           partner.url ? (
             <a class="partner-card" href={partner.url} target="_blank" rel="noopener">
               <div class={`partner-logo-wrap${partner.logoOnDarkBg ? ' dark' : ''}`}>
-                {partner.logo && <img src={urlFor(partner.logo).width(300).url()} alt={`${partner.name} logo`} loading="lazy" />}
+                {partner.logo && <img src={urlFor(partner.logo).url()} alt={`${partner.name} logo`} loading="lazy" />}
               </div>
               <span class="partner-name">{partner.name}</span>
             <span class="visually-hidden"> (opens in a new tab)</span></a>
           ) : (
             <div class="partner-card no-link">
               <div class={`partner-logo-wrap${partner.logoOnDarkBg ? ' dark' : ''}`}>
-                {partner.logo && <img src={urlFor(partner.logo).width(300).url()} alt={`${partner.name} logo`} loading="lazy" />}
+                {partner.logo && <img src={urlFor(partner.logo).url()} alt={`${partner.name} logo`} loading="lazy" />}
               </div>
               <span class="partner-name">{partner.name}</span>
             </div>

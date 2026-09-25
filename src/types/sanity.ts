@@ -18,7 +18,6 @@ export type PortableTextBlock = Record<string, unknown>
 export interface SeoData {
   metaTitle?: string
   metaDescription?: string
-  shareImage?: SanityImage
   noIndex?: boolean
 }
 
@@ -26,7 +25,11 @@ export interface SectionSettings {
   background?: 'default' | 'tinted' | 'light' | 'gray' | 'gold' | 'white'
   width?: 'narrow' | 'standard'
   alignment?: 'left' | 'center'
+  removeTopPadding?: boolean
+  removeBottomPadding?: boolean
+  /** @deprecated replaced by removeTopPadding / removeBottomPadding */
   padTop?: 'default' | 'none'
+  /** @deprecated */
   padBottom?: 'default' | 'none'
   anchorId?: string
 }
@@ -235,6 +238,7 @@ export interface PullQuoteBlock {
 export interface ResourceSpotlightBlock {
   _type: 'resourceSpotlight'
   _key: string
+  tags?: string[]
   heading: string
   subheading?: string
   media?: SanityImage

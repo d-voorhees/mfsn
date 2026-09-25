@@ -16,7 +16,7 @@ const { block } = Astro.props;
       <div class="row justify-content-center g-5">
         {block.people.map((person) => (
           <div class="col-md-6 col-lg-5 team-member">
-            {person.photo && <img src={urlFor(person.photo).width(400).url()} alt={person.photo.alt} class="team-photo" />}
+            {person.photo && <img src={urlFor(person.photo).url()} alt={person.photo.alt} class="team-photo" />}
             <h3 class="team-name">{person.name}</h3>
             {person.role && <p class="team-role">{person.role}</p>}
             {person.email && <p class="team-email">{person.email}</p>}
@@ -33,7 +33,7 @@ const { block } = Astro.props;
           {block.heading && <h2 class="members-heading">{block.heading}</h2>}
           {block.intro && <p class="members-intro">{block.intro}</p>}
           {block.introImage && (
-            <img src={urlFor(block.introImage).width(700).url()} alt={block.introImage.alt} class="members-photo" />
+            <img src={urlFor(block.introImage).url()} alt={block.introImage.alt} class="members-photo" />
           )}
         </div>
         <div class="col-md-6">

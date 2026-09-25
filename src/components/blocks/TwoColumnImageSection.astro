@@ -2,7 +2,7 @@
 import { urlFor } from '../../lib/sanity';
 import { renderPortableText } from '../../lib/portableText';
 import { resolveHref, isExternal } from '../../lib/link';
-import { backgroundStyle } from '../../lib/sectionSettings';
+import { backgroundStyle, paddingClass } from '../../lib/sectionSettings';
 import type { TwoColumnImageSectionBlock } from '../../types/sanity';
 
 interface Props {
@@ -14,7 +14,7 @@ const settings = block.settings ?? {};
 ---
 
 <section
-  class="focus-section"
+  class={['focus-section', paddingClass(settings)].filter(Boolean).join(' ')}
   id={settings.anchorId || undefined}
   style={backgroundStyle(settings)}
 >
@@ -24,7 +24,7 @@ const settings = block.settings ?? {};
       {block.columns.map((column) => (
         <div class="col-lg-6 focus-col">
           <h3>{column.heading}</h3>
-          <img src={urlFor(column.image).width(800).url()} alt={column.image.alt} class="focus-photo" />
+          <img src={urlFor(column.image).url()} alt={column.image.alt} class="focus-photo" />
           <Fragment set:html={renderPortableText(column.body)} />
           {column.noteText && <p class="partnership-note">{column.noteText}</p>}
           {column.actions && column.actions.length > 0 && (

@@ -24,7 +24,7 @@ export const navigationItem = defineType({
       name: 'link',
       title: 'Link',
       type: 'link',
-      description: 'Used when this item has no dropdown items.',
+      description: 'Optional. Leave empty if this top-level item is just a label (e.g. it only opens a dropdown).',
     }),
     defineField({
       name: 'dropdownItems',
@@ -33,14 +33,5 @@ export const navigationItem = defineType({
       of: [{type: 'navigationLink'}],
     }),
   ],
-  validation: (rule) =>
-    rule.custom((value) => {
-      const hasLink = Boolean(value?.link)
-      const hasDropdown = Array.isArray(value?.dropdownItems) && value.dropdownItems.length > 0
-      if (!hasLink && !hasDropdown) {
-        return 'Provide either a direct link or at least one dropdown item.'
-      }
-      return true
-    }),
   preview: {select: {title: 'label'}},
 })

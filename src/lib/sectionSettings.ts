@@ -26,8 +26,12 @@ export function backgroundStyle(settings?: SectionSettings): string | undefined 
 export const NARROW_COLUMN_CLASS = 'col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2';
 
 // Bootstrap spacing utilities (pt-0 / pb-0) that override the default
-// `section { padding: 5em 0 }`.
+// `section { padding: 5em 0 }`. Driven by the "Remove top/bottom padding"
+// checkboxes; the legacy padTop/padBottom === 'none' values still count.
 export function paddingClass(settings?: SectionSettings): string | undefined {
-  const classes = [settings?.padTop === 'none' ? 'pt-0' : '', settings?.padBottom === 'none' ? 'pb-0' : ''].filter(Boolean);
+  const classes = [
+    settings?.removeTopPadding || settings?.padTop === 'none' ? 'pt-0' : '',
+    settings?.removeBottomPadding || settings?.padBottom === 'none' ? 'pb-0' : '',
+  ].filter(Boolean);
   return classes.length ? classes.join(' ') : undefined;
 }

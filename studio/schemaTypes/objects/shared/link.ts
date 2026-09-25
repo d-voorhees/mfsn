@@ -38,6 +38,8 @@ export default defineType({
   ],
   validation: (rule) =>
     rule.custom((value) => {
+      // An entirely empty link is valid here; required-ness is enforced by the parent field.
+      if (!value) return true
       const hasInternal = Boolean(value?.internalLink)
       const hasExternal = Boolean(value?.externalUrl)
       const hasFile = Boolean(value?.file)

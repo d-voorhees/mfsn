@@ -59,9 +59,9 @@ export default defineType({
     }),
   ],
   preview: {
-    select: {title: 'heading'},
-    prepare({title}) {
-      return {title: title || 'Team grid'}
+    select: {heading: 'heading'},
+    prepare({heading}) {
+      return {title: 'Team Grid', subtitle: heading}
     },
   },
 })
