@@ -24,7 +24,14 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: studio/package-lock.json
+          cache-dependency-path: |
+            package-lock.json
+            studio/package-lock.json
+      # The root tsconfig.json extends astro/tsconfigs/strict, and the studio
+      # build resolves it. Without the root install, astro isn't found in CI.
+      - name: Install root dependencies
+        run: npm ci
+        working-directory: .
       - run: npm ci
       - name: Deploy Studio
         run: npx sanity deploy
