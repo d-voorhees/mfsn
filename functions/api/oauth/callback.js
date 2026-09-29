@@ -6,8 +6,8 @@ export async function onRequest(context) {
     return new Response('No code received.', { status: 400 });
   }
 
-  const CLIENT_ID = 'YOUR_CLIENT_ID';
-  const CLIENT_SECRET = 'YOUR_CLIENT_SECRET';
+  const CLIENT_ID = context.env.CONSTANT_CONTACT_CLIENT_ID;
+  const CLIENT_SECRET = context.env.CONSTANT_CONTACT_CLIENT_SECRET;
 
   const basic = btoa(`${CLIENT_ID}:${CLIENT_SECRET}`);
 
