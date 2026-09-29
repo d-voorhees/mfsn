@@ -41,7 +41,7 @@ const calloutFirst = callout?.position === 'left';
       <div class={`row g-5 align-items-stretch${calloutFirst ? '' : ' flex-row-reverse'}`}>
         <div class="col-md-5">
           {callout.style === 'pink' ? (
-            <div class="resource-callout">
+            <div class="resource-callout pillar-card">
               {callout.heading && <h3>{callout.heading}</h3>}
               {callout.body && <p>{callout.body}</p>}
             </div>

@@ -2077,16 +2077,10 @@ a.partner-card:hover {
 /* =====================================================================
    PAGE: Unite Us (unite-us.html)
    ===================================================================== */
+/* Pink intro box: pairs with .pillar-card (border + light tint) via --pillar-color. */
 .resource-callout {
-  background: color-mix(in srgb, var(--logo-pink) 80%, transparent);
-  color: #fff;
+  --pillar-color: var(--logo-pink);
   padding: 2.5rem;
-  border-radius: 6px;
-  height: 100%;
-}
-
-.resource-callout h3 {
-  color: #fff;
 }
 
 .resource-info p {
