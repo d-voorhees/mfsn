@@ -13,8 +13,8 @@
   --footer-bg: #f1f3f4;
   --site-footer-bg: #000000;
   --site-footer-text: #e8eaed;
-  --accent-gold: #8a601d;      /* white text on this = 5.6:1 (WCAG AA) */
-  --accent-gold-dark: #6b4a14;
+  --accent-gold: #b9812e;
+  --accent-gold-dark: #96692a;
   --logo-pink: #ec008c;
   --logo-green: #b2d235;
   --logo-orange: #f9a01b;
@@ -530,7 +530,7 @@ body.mobile-menu-open { overflow: hidden; }
   border: 2px solid transparent;
   border-radius: 999px;
   text-decoration: none;
-  box-shadow: 0 3px 10px rgba(138, 96, 29, 0.35);
+  box-shadow: 0 3px 10px rgba(185, 129, 46, 0.35);
   transition: all 0.2s ease;
   appearance: none;
   cursor: pointer;
@@ -540,7 +540,7 @@ body.mobile-menu-open { overflow: hidden; }
   background: var(--accent-gold-dark);
   color: #fff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(138, 96, 29, 0.4);
+  box-shadow: 0 6px 16px rgba(185, 129, 46, 0.4);
 }
 
 .btn-cta::after {
@@ -610,8 +610,8 @@ body.mobile-menu-open { overflow: hidden; }
   --text-dark: #000000;
   --text-body: #000000;
   --bg-light: #f1f3f4;
-  --accent-gold: #8a601d;
-  --accent-gold-dark: #6b4a14;
+  --accent-gold: #c8933d;
+  --accent-gold-dark: #a9772c;
   --accent-gold-bg: #d5ac6a;
 }
 
@@ -854,7 +854,7 @@ h2.matters-heading.pr-5 {
   font-family: 'Metropolis', sans-serif;
   font-size: 3.5rem;
   font-weight: 800;
-  color: color-mix(in srgb, var(--step-color, var(--accent-gold)) 55%, #000);
+  color: var(--step-color, var(--accent-gold));
   line-height: 1;
   flex-shrink: 0;
   width: 3.5rem;
@@ -1150,7 +1150,7 @@ h2.matters-heading.pr-5 {
 
 .navigator-callout .callout-label {
   font-weight: 700;
-  color: color-mix(in srgb, var(--callout-color, var(--accent-gold-dark)) 55%, #000);
+  color: var(--callout-color, var(--accent-gold-dark));
   letter-spacing: 0.3px;
 }
 
@@ -1615,7 +1615,7 @@ a.partner-card:hover {
   font-family: 'Metropolis', sans-serif;
   font-weight: 800;
   font-size: 1.75rem;
-  color: color-mix(in srgb, var(--pillar-color) 55%, #000);
+  color: var(--pillar-color);
   display: block;
   margin-bottom: 0.5rem;
 }
