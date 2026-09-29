@@ -2,6 +2,7 @@
 import { urlFor } from '../../lib/sanity';
 import { renderPortableText } from '../../lib/portableText';
 import { resolveHref, isExternal } from '../../lib/link';
+import { buttonClass } from '../../lib/buttonStyle';
 import { backgroundStyle, paddingClass } from '../../lib/sectionSettings';
 import type { TextImageSectionBlock } from '../../types/sanity';
 
@@ -52,7 +53,7 @@ const calloutFirst = callout?.position === 'left';
               {callout.action && (
                 <a
                   href={resolveHref(callout.action.link)}
-                  class={callout.action.style === 'primary' ? 'btn-cta' : callout.action.style === 'outlineGold' ? 'btn-cta-outline-gold' : 'btn-cta-outline'}
+                  class={buttonClass(callout.action.style)}
                   target={isExternal(callout.action.link) ? '_blank' : undefined}
                   rel={isExternal(callout.action.link) ? 'noopener' : undefined}
                 >
@@ -70,7 +71,7 @@ const calloutFirst = callout?.position === 'left';
               {block.actions.map((action) => (
                 <a
                   href={resolveHref(action.link)}
-                  class={action.style === 'primary' ? 'btn-cta' : action.style === 'outlineGold' ? 'btn-cta-outline-gold' : 'btn-cta-outline'}
+                  class={buttonClass(action.style)}
                   target={isExternal(action.link) ? '_blank' : undefined}
                   rel={isExternal(action.link) ? 'noopener' : undefined}
                 >
@@ -101,7 +102,7 @@ const calloutFirst = callout?.position === 'left';
                   {block.actions.map((action) => (
                     <a
                       href={resolveHref(action.link)}
-                      class={action.style === 'primary' ? 'btn-cta' : action.style === 'outlineGold' ? 'btn-cta-outline-gold' : 'btn-cta-outline'}
+                      class={buttonClass(action.style)}
                       target={isExternal(action.link) ? '_blank' : undefined}
                       rel={isExternal(action.link) ? 'noopener' : undefined}
                     >
@@ -133,7 +134,7 @@ const calloutFirst = callout?.position === 'left';
                   {block.actions.map((action) => (
                     <a
                       href={resolveHref(action.link)}
-                      class={action.style === 'primary' ? 'btn-cta' : action.style === 'outlineGold' ? 'btn-cta-outline-gold' : 'btn-cta-outline'}
+                      class={buttonClass(action.style)}
                       target={isExternal(action.link) ? '_blank' : undefined}
                       rel={isExternal(action.link) ? 'noopener' : undefined}
                     >

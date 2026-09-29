@@ -109,7 +109,7 @@ const PAGE_BUILDER_PROJECTION = `
       "resourceLinks": resourceLinks[]{label, internalLink->{slug}, "fileUrl": file->file.asset->url, externalUrl}
     },
     _type == "newsGrid" => {
-      "mentions": mentions[]->{_id, headline, outletName, outletLogo, excerpt, byline, citation, url, linkLabel, featured, publishedAt},
+      "mentions": mentions[]->{_id, headline, outletLogo, excerpt, byline, citation, url, linkLabel},
       ${RESOLVED_LINK('trailingLink')}
     }
   }

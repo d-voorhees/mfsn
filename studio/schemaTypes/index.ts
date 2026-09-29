@@ -9,7 +9,7 @@ import imageWithAlt from './objects/shared/imageWithAlt'
 import seo from './objects/shared/seo'
 import sectionSettings from './objects/shared/sectionSettings'
 import mapEmbed from './objects/shared/mapEmbed'
-import {navigationItem, navigationLink} from './objects/shared/navigationItem'
+import {navigationDestination, navigationItem, navigationLink} from './objects/shared/navigationItem'
 
 import heroCentered from './objects/blocks/heroCentered'
 import richTextSection from './objects/blocks/richTextSection'
@@ -41,6 +41,7 @@ export const schemaTypes = [
   seo,
   sectionSettings,
   mapEmbed,
+  navigationDestination,
   navigationLink,
   navigationItem,
 

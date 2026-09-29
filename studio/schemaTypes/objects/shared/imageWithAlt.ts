@@ -15,10 +15,5 @@ export default defineType({
       description: 'Describe what is shown, for screen readers and SEO.',
       validation: (rule) => rule.required(),
     }),
-    defineField({
-      name: 'caption',
-      title: 'Caption',
-      type: 'string',
-    }),
   ],
 })

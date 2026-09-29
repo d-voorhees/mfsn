@@ -1,6 +1,7 @@
 ---
 import { urlFor } from '../../lib/sanity';
 import { resolveHref, isExternal } from '../../lib/link';
+import { buttonClass } from '../../lib/buttonStyle';
 import { backgroundStyle, paddingClass } from '../../lib/sectionSettings';
 import type { FeatureGridBlock, FeatureGridMarkerIconKey } from '../../types/sanity';
 
@@ -97,7 +98,7 @@ const colSpanClass =
               {item.action && (
                 <a
                   href={resolveHref(item.action.link)}
-                  class={item.action.style === 'primary' ? 'btn-cta' : item.action.style === 'outlineGold' ? 'btn-cta-outline-gold' : 'btn-cta-outline'}
+                  class={buttonClass(item.action.style)}
                   target={isExternal(item.action.link) ? '_blank' : undefined}
                   rel={isExternal(item.action.link) ? 'noopener' : undefined}
                 >

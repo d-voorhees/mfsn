@@ -11,8 +11,21 @@ export default defineType({
   description: 'A press mention or article about MFSN.',
   fields: [
     defineField({name: 'headline', title: 'Headline', type: 'string', validation: (rule) => rule.required()}),
-    defineField({name: 'outletName', title: 'Outlet name', type: 'string', validation: (rule) => rule.required()}),
-    defineField({name: 'outletLogo', title: 'Outlet logo', type: 'imageWithAlt'}),
+    defineField({
+      name: 'outletLogo',
+      title: 'Outlet logo',
+      type: 'image',
+      options: {hotspot: true},
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alternative text',
+          type: 'string',
+          description: 'Describe what is shown, for screen readers and SEO.',
+          validation: (rule) => rule.required(),
+        }),
+      ],
+    }),
     defineField({name: 'excerpt', title: 'Excerpt', type: 'array', of: [{type: 'block'}]}),
     defineField({name: 'byline', title: 'Byline', type: 'string'}),
     defineField({
@@ -29,19 +42,8 @@ export default defineType({
       description: 'e.g. "Read Article →" or "Watch Video / Read Article →".',
       initialValue: 'Read Article',
     }),
-    defineField({
-      name: 'featured',
-      title: 'Featured on homepage',
-      type: 'boolean',
-      description: 'Controls which mentions appear in the homepage preview grid.',
-      initialValue: false,
-    }),
-    defineField({name: 'publishedAt', title: 'Published date', type: 'date'}),
-  ],
-  orderings: [
-    {title: 'Published date, new first', name: 'publishedAtDesc', by: [{field: 'publishedAt', direction: 'desc'}]},
   ],
   preview: {
-    select: {title: 'headline', subtitle: 'outletName', media: 'outletLogo'},
+    select: {title: 'headline', subtitle: 'byline', media: 'outletLogo'},
   },
 })

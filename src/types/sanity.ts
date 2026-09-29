@@ -6,7 +6,6 @@ export interface SanityImage {
   asset: {_ref: string; _type: 'reference'}
   hotspot?: {x: number; y: number; height: number; width: number}
   alt: string
-  caption?: string
 }
 
 // Portable Text is intentionally left as a loose block shape here — the
@@ -43,7 +42,7 @@ export interface LinkData {
 
 export interface ActionData {
   link: LinkData
-  style: 'primary' | 'outline' | 'outlineGold'
+  style: 'primary' | 'outline' | 'outlineGold' // outlineGold: legacy, renders as outline
 }
 
 export interface MapEmbedData {
@@ -79,15 +78,12 @@ export interface SiteSettingsData {
 export interface NewsMentionData {
   _id: string
   headline: string
-  outletName: string
   outletLogo?: SanityImage
   excerpt?: PortableTextBlock[]
   byline?: string
   citation?: string
   url: string
   linkLabel?: string
-  featured?: boolean
-  publishedAt?: string
 }
 
 // --- Page-builder blocks ---
@@ -270,6 +266,7 @@ export interface NewsGridBlock {
   heading: string
   mentions: NewsMentionData[]
   trailingLink?: LinkData
+  trailingLinkStyle?: "primary" | "outline"
 }
 
 export interface LogoCloudPartner {

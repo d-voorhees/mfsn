@@ -2,6 +2,7 @@
 import { urlFor } from '../../lib/sanity';
 import { renderPortableText } from '../../lib/portableText';
 import { resolveHref, isExternal } from '../../lib/link';
+import { buttonClass } from '../../lib/buttonStyle';
 import type { NewsGridBlock } from '../../types/sanity';
 
 interface Props {
@@ -36,7 +37,7 @@ const { block } = Astro.props;
       <div class="news-more-wrap">
         <a
           href={resolveHref(block.trailingLink)}
-          class="btn-cta"
+          class={buttonClass(block.trailingLinkStyle)}
           target={isExternal(block.trailingLink) ? '_blank' : undefined}
           rel={isExternal(block.trailingLink) ? 'noopener' : undefined}
         >

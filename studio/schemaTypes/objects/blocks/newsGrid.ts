@@ -23,6 +23,19 @@ export default defineType({
       type: 'link',
       description: 'e.g. "More MFSN in the News →".',
     }),
+    defineField({
+      name: 'trailingLinkStyle',
+      title: 'Trailing link button style',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Regular (filled gold)', value: 'primary'},
+          {title: 'Outline', value: 'outline'},
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'primary',
+    }),
   ],
   preview: {
     select: {heading: 'heading'},

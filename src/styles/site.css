@@ -732,6 +732,19 @@ section {
   border-color: var(--accent-gold);
 }
 
+/* Outline buttons sit on the dark hero image, so they invert to white there */
+.hero-ctas .btn-cta-outline-gold {
+  background: transparent;
+  color: #fff;
+  border-color: #fff;
+}
+
+.hero-ctas .btn-cta-outline-gold:hover {
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  border-color: #fff;
+}
+
 /* Section 2: Why the Network Exists */
 
 .network-intro-logo {

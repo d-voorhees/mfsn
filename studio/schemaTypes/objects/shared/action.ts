@@ -1,8 +1,7 @@
 import {defineField, defineType} from 'sanity'
 
-// A link plus a visual style. The three styles here are the three button
-// treatments actually used in the source CSS (btn-cta, btn-cta-outline,
-// btn-cta-outline-gold) — not an open-ended style picker.
+// A link plus a visual style: a filled gold button or an outline button
+// (the treatment used on the resource page). Not an open-ended style picker.
 export default defineType({
   name: 'action',
   title: 'Action',
@@ -20,9 +19,8 @@ export default defineType({
       type: 'string',
       options: {
         list: [
-          {title: 'Primary', value: 'primary'},
+          {title: 'Regular (filled gold)', value: 'primary'},
           {title: 'Outline', value: 'outline'},
-          {title: 'Outline (gold)', value: 'outlineGold'},
         ],
         layout: 'radio',
       },
