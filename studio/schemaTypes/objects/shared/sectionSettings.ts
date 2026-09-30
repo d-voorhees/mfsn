@@ -1,5 +1,12 @@
 import {defineField, defineType} from 'sanity'
 
+// TextImageSection never reads width/alignment, so those two are hidden
+// when the settings belong to one.
+const isTextImageSection = ({document, path}: {document?: any; path: any[]}) => {
+  const key = path.find((seg) => typeof seg === 'object' && seg && '_key' in seg)?._key
+  return document?.pageBuilder?.find((b: {_key: string}) => b._key === key)?._type === 'textImageSection'
+}
+
 // Constrained layout knobs only — every option here maps to an existing
 // CSS treatment already used in the source site (e.g. the #f2f2f2 tinted
 // background used to zebra-stripe sections). No arbitrary colors/spacing.
@@ -36,6 +43,7 @@ export default defineType({
         ],
       },
       initialValue: 'standard',
+      hidden: isTextImageSection,
     }),
     defineField({
       name: 'alignment',
@@ -48,6 +56,7 @@ export default defineType({
         ],
       },
       initialValue: 'left',
+      hidden: isTextImageSection,
     }),
     defineField({
       name: 'removeTopPadding',

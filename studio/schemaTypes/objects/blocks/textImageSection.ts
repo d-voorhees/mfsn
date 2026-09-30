@@ -1,6 +1,12 @@
 import {defineField, defineType} from 'sanity'
 import {bodyBlock} from '../shared/bodyBlock'
 
+type Parent = {mediaPosition?: string; proseStyle?: string; callout?: unknown} | undefined
+
+// The renderer only shows the callout column when media position is "None"
+// and a callout exists; fields it never reads in that layout are hidden.
+const usesCallout = (p: Parent) => p?.mediaPosition === 'none' && Boolean(p.callout)
+
 export default defineType({
   name: 'textImageSection',
   title: 'Text + Image Section',
@@ -8,7 +14,13 @@ export default defineType({
   description:
     'A text column paired with an image on the left or right, or text alone when media position is "None" (e.g. the Unite Us / Member Connection join-instructions layout).',
   fields: [
-    defineField({name: 'eyebrow', title: 'Eyebrow', type: 'string'}),
+    defineField({
+      name: 'eyebrow',
+      title: 'Eyebrow',
+      type: 'string',
+      description: 'Only shown with the Spotlight prose style.',
+      hidden: ({parent}) => (parent as Parent)?.proseStyle !== 'spotlight' || usesCallout(parent as Parent),
+    }),
     defineField({name: 'heading', title: 'Heading', type: 'string', validation: (rule) => rule.required()}),
     defineField({
       name: 'proseStyle',
@@ -22,6 +34,7 @@ export default defineType({
         ],
       },
       initialValue: 'default',
+      hidden: ({parent}) => usesCallout(parent as Parent),
     }),
     defineField({
       name: 'listStyle',
@@ -37,7 +50,12 @@ export default defineType({
       initialValue: 'default',
     }),
     defineField({name: 'body', title: 'Body', type: 'array', of: [bodyBlock]}),
-    defineField({name: 'image', title: 'Image', type: 'imageWithAlt'}),
+    defineField({
+      name: 'image',
+      title: 'Image',
+      type: 'imageWithAlt',
+      hidden: ({parent}) => (parent as Parent)?.mediaPosition === 'none',
+    }),
     defineField({
       name: 'imageStyle',
       title: 'Image style',
@@ -52,6 +70,7 @@ export default defineType({
         ],
       },
       initialValue: 'natural',
+      hidden: ({parent}) => (parent as Parent)?.mediaPosition === 'none',
       validation: (rule) => rule.required(),
     }),
     defineField({
@@ -73,7 +92,8 @@ export default defineType({
       title: 'Link list',
       type: 'array',
       of: [{type: 'link'}],
-      description: 'Optional list of labeled links, e.g. a yearly document-archive index.',
+      description: 'Optional list of labeled links, e.g. a yearly document-archive index. Not shown with the Spotlight prose style.',
+      hidden: ({parent}) => (parent as Parent)?.proseStyle === 'spotlight' || usesCallout(parent as Parent),
     }),
     defineField({name: 'actions', title: 'Actions', type: 'array', of: [{type: 'action'}]}),
     defineField({
@@ -82,6 +102,7 @@ export default defineType({
       type: 'object',
       description:
         'Optional second column shown alongside the main body when media position is "None" — e.g. Unite Us’s pink intro box, or Member Connection’s "Ready to Join" card. Leave empty for a plain single-column layout.',
+      hidden: ({parent}) => (parent as Parent)?.mediaPosition !== 'none',
       fields: [
         defineField({name: 'heading', title: 'Heading', type: 'string'}),
         defineField({name: 'body', title: 'Body', type: 'text', rows: 3}),
@@ -109,7 +130,13 @@ export default defineType({
           },
           initialValue: 'left',
         }),
-        defineField({name: 'action', title: 'Action', type: 'action'}),
+        defineField({
+          name: 'action',
+          title: 'Action',
+          type: 'action',
+          description: 'Only shown on the Bordered card style.',
+          hidden: ({parent}) => (parent as {style?: string} | undefined)?.style !== 'card',
+        }),
       ],
     }),
     defineField({name: 'settings', title: 'Section settings', type: 'sectionSettings'}),

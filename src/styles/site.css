@@ -525,8 +525,8 @@ body.mobile-menu-open { overflow: hidden; }
   color: #fff;
   font-weight: 800;
   font-family: 'Metropolis', sans-serif;
-  font-size: 1rem;
-  padding: 0.5rem 1.4rem;
+  font-size: 0.875rem;
+  padding: 0.45rem 1.1rem;
   border: 2px solid transparent;
   border-radius: 999px;
   text-decoration: none;
@@ -685,8 +685,8 @@ section {
   border: 2px solid white;
   font-weight: 800;
   font-family: 'Metropolis', sans-serif;
-  font-size: 1rem;
-  padding: 0.5rem 1.4rem;
+  font-size: 0.875rem;
+  padding: 0.45rem 1.1rem;
   border-radius: 999px;
   text-decoration: none;
   transition: all 0.2s ease;
@@ -719,8 +719,8 @@ section {
   border: 2px solid var(--accent-gold);
   font-weight: 800;
   font-family: 'Metropolis', sans-serif;
-  font-size: 1rem;
-  padding: 0.85rem 1.9rem;
+  font-size: 0.875rem;
+  padding: 0.45rem 1.1rem;
   border-radius: 999px;
   text-decoration: none;
   transition: all 0.15s ease;
@@ -925,7 +925,7 @@ h2.matters-heading.pr-5 {
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
-  margin-bottom: 3rem;
+  margin-bottom: 0;
 }
 
 .partner-heading img {
@@ -1249,15 +1249,6 @@ h2.matters-heading.pr-5 {
   flex-wrap: wrap;
 }
 
-.updates-signup-form input {
-  border: 1px solid var(--border-light);
-  padding: 0.55rem 0.85rem;
-  flex: 1;
-  min-width: 180px;
-  height: 49px;
-  border-radius: 5px;
-}
-
 .btn-signup {
   display: inline-flex;
   align-items: center;
@@ -1267,8 +1258,8 @@ h2.matters-heading.pr-5 {
   color: #fff;
   font-weight: 800;
   font-family: 'Metropolis', sans-serif;
-  font-size: 1rem;
-  padding: 0.65rem 1.9rem;
+  font-size: 0.875rem;
+  padding: 0.45rem 1.1rem;
   border: 2px solid transparent;
   border-radius: 999px;
   text-decoration: none;
@@ -1829,9 +1820,9 @@ a.partner-card:hover {
   border: 1px solid var(--accent-gold);
   color: var(--accent-gold-dark);
   background: #fff;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   font-weight: 800;
-  padding: 0.55rem 1.1rem;
+  padding: 0.45rem 1.1rem;
   border-radius: 999px;
   text-decoration: none;
   transition: all 0.15s ease;

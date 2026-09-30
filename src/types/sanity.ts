@@ -306,7 +306,8 @@ export interface NewsletterSignupBlock {
   _key: string
   heading: string
   description?: string
-  formAction?: string
+  buttonLabel?: string
+  buttonUrl?: string
 }
 
 export type PageBlock =

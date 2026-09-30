@@ -1,21 +1,22 @@
 import {defineField, defineType} from 'sanity'
 
-// formAction is a plain URL, not a raw-HTML/embed field — the actual
-// Constant Contact (or equivalent) form markup lives in the Astro
-// component, not in Sanity.
+// The signup is a plain link button (no on-site email field): buttonUrl
+// points at the external signup page (e.g. a Constant Contact form).
 export default defineType({
   name: 'newsletterSignup',
   title: 'CTA: Newsletter Signup',
   type: 'object',
-  description: 'An email capture prompt.',
+  description: 'A heading and a button that links to an external signup page.',
   fields: [
     defineField({name: 'heading', title: 'Heading', type: 'string', validation: (rule) => rule.required()}),
     defineField({name: 'description', title: 'Description', type: 'text', rows: 2}),
+    defineField({name: 'buttonLabel', title: 'Button label', type: 'string', initialValue: 'Sign Up'}),
     defineField({
-      name: 'formAction',
-      title: 'Form action URL',
+      name: 'buttonUrl',
+      title: 'Button link',
       type: 'url',
-      description: 'The signup service endpoint (e.g. a Constant Contact form action URL).',
+      description: 'Where the Sign Up button goes (e.g. your Constant Contact signup page).',
+      validation: (rule) => rule.uri({scheme: ['http', 'https', 'mailto']}),
     }),
   ],
   preview: {

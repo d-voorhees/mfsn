@@ -56,7 +56,7 @@ const colSpanClass =
     ) : (
       block.heading && <h2>{block.heading}</h2>
     )}
-    <div class="row pt-4 g-4">
+    <div class={settings.anchorId === 'strategic-pillars' ? 'row g-4' : 'row pt-4 g-4'}>
       {block.items.map((item, index) => {
         const accent = ACCENT_COLORS[index % ACCENT_COLORS.length];
         return isWorkStep ? (

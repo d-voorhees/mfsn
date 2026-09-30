@@ -25,7 +25,7 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
       navigation[]{
         label,
         link{${LINK_PROJECTION}},
-        dropdownItems[]{
+        "dropdownItems": select(hasDropdown == false => [], dropdownItems)[]{
           label,
           link{${LINK_PROJECTION}}
         }
