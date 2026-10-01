@@ -6,7 +6,7 @@ export function resolveHref(link?: LinkData): string {
   if (!link) return '#';
   if (link.internalLink?.slug?.current) {
     const slug = link.internalLink.slug.current;
-    return slug === 'home' ? '/' : `/${slug}/`;
+    return slug === 'homepage' ? '/' : `/${slug}/`;
   }
   if (link.fileUrl) return link.fileUrl;
   return link.externalUrl ?? '#';

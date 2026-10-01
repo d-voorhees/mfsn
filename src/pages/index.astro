@@ -12,10 +12,10 @@ import AgendaWidget from '../components/global/AgendaWidget.astro';
 import NewsletterSignup from '../components/blocks/NewsletterSignup.astro';
 import { getPageBySlug } from '../lib/queries';
 
-const page = await getPageBySlug('home');
+const page = await getPageBySlug('homepage');
 
 if (!page) {
-  throw new Error('Homepage (slug "home") not found in Sanity — has it been migrated/published?');
+  throw new Error('Homepage (slug "homepage") not found in Sanity — has it been migrated/published?');
 }
 
 const blocks = page.pageBuilder ?? [];

@@ -140,10 +140,10 @@ export async function getPageBySlug(slug: string): Promise<PageData | null> {
   );
 }
 
-// Every page slug except "home" (which owns its own dedicated route,
+// Every page slug except "homepage" (which owns its own dedicated route,
 // src/pages/index.astro, and its own homepage-specific layout splice).
 // Used by src/pages/[slug].astro's getStaticPaths() to statically generate
 // every remaining page.
 export async function getAllPageSlugsExceptHome(): Promise<string[]> {
-  return sanityClient.fetch(`*[_type == "page" && slug.current != "home"].slug.current`);
+  return sanityClient.fetch(`*[_type == "page" && slug.current != "homepage"].slug.current`);
 }

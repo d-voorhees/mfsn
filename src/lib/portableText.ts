@@ -41,7 +41,7 @@ export function renderPortableText(blocks?: PortableTextBlock[], options?: { lis
         internalLink: ({ children, value }) => {
           const slug = value?.slug;
           if (!slug) return children;
-          return `<a href="${slug === 'home' ? '/' : `/${slug}/`}">${children}</a>`;
+          return `<a href="${slug === 'homepage' ? '/' : `/${slug}/`}">${children}</a>`;
         },
         // "Link to an upload": queries.ts resolves the reference to the
         // file's CDN URL. Opens in a new tab so a PDF doesn't replace the page.
