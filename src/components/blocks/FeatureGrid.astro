@@ -52,6 +52,10 @@ const ACCENT_COLORS = ['var(--logo-blue)', 'var(--logo-orange)', 'var(--logo-pin
 const isWorkStep = block.markerStyle === 'number';
 const isPartnerStyle = block.markerStyle === 'none';
 
+// Up to two logos under a card. `feature-item-images` / `feature-item-image`
+// are the hooks for styling; the inline sizing is only a default.
+const imageStyle = 'max-height: 60px; width: auto; max-width: 45%;';
+
 const colSpanClass =
   block.columns === 'two' ? 'col-md-6' : block.columns === 'four' ? 'col-sm-6 col-lg-3' : 'col-sm-6 col-lg-4';
 ---
@@ -93,6 +97,13 @@ const colSpanClass =
                 {entry.link.label}
               </a>
             ))}
+            {item.addImages && item.images?.length ? (
+              <div class="feature-item-images partner-col-images d-flex flex-wrap justify-content-center align-items-center gap-3 mt-3">
+                {item.images.slice(0, 2).map((image) => (
+                  <img class="feature-item-image" src={urlFor(image).height(120).url()} alt={image.alt} loading="lazy" style={imageStyle} />
+                ))}
+              </div>
+            ) : null}
           </div>
         ) : (
           <div class={colSpanClass}>
@@ -121,9 +132,9 @@ const colSpanClass =
                 {isExternal(entry.link) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
               ))}
               {item.addImages && item.images?.length ? (
-                <div class="d-flex flex-wrap align-items-center gap-3 mt-3">
+                <div class="feature-item-images d-flex flex-wrap align-items-center gap-3 mt-3">
                   {item.images.slice(0, 2).map((image) => (
-                    <img src={urlFor(image).height(120).url()} alt={image.alt} loading="lazy" style="max-height: 60px; width: auto; max-width: 45%;" />
+                    <img class="feature-item-image" src={urlFor(image).height(120).url()} alt={image.alt} loading="lazy" style={imageStyle} />
                   ))}
                 </div>
               ) : null}

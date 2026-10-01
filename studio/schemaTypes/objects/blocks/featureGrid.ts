@@ -167,6 +167,7 @@ export default defineType({
       title: 'Trailing link',
       type: 'link',
       description: 'Optional link shown below the grid, e.g. "See our full strategy →".',
+      options: {collapsible: true, collapsed: true},
     }),
     defineField({name: 'settings', title: 'Section settings', type: 'sectionSettings'}),
   ],
