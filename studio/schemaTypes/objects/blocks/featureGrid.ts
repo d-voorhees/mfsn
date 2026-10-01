@@ -1,4 +1,12 @@
 import {defineField, defineType} from 'sanity'
+import {bodyBlock} from '../shared/bodyBlock'
+
+// Icon/marker-image fields stay hidden until "Show icon?" is ticked, but
+// cards that already have one set keep showing it so nothing gets lost.
+const hideMarkerFields = (parent: unknown) => {
+  const item = parent as {showMarker?: boolean; markerIconKey?: string; markerImage?: unknown} | undefined
+  return !(item?.showMarker || item?.markerIconKey || item?.markerImage)
+}
 
 // Strongest reuse evidence in the whole site: Home's "How We Work" (numbered),
 // "Strategic Pillars" (icon), "Partner With Us" (no marker); Our Strategy's
@@ -63,10 +71,18 @@ export default defineType({
           title: 'Feature item',
           fields: [
             defineField({
+              name: 'showMarker',
+              title: 'Show icon?',
+              type: 'boolean',
+              description: 'Tick to choose an icon or logo image for this card.',
+              initialValue: false,
+            }),
+            defineField({
               name: 'markerIconKey',
               title: 'Icon',
               type: 'string',
               description: 'Used when marker style is "Icon".',
+              hidden: ({parent}) => hideMarkerFields(parent),
               options: {
                 list: [
                   {title: 'Connection', value: 'connection'},
@@ -85,6 +101,7 @@ export default defineType({
               title: 'Marker image',
               type: 'imageWithAlt',
               description: 'Used when marker style is "Logo image".',
+              hidden: ({parent}) => hideMarkerFields(parent),
             }),
             defineField({
               name: 'title',
@@ -92,8 +109,54 @@ export default defineType({
               type: 'string',
               validation: (rule) => rule.required(),
             }),
-            defineField({name: 'description', title: 'Description', type: 'text', rows: 3}),
-            defineField({name: 'action', title: 'Action', type: 'action'}),
+            defineField({
+              name: 'body',
+              title: 'Description',
+              type: 'array',
+              of: [bodyBlock],
+            }),
+            // Plain-text description from before the rich-text field existed.
+            // Only shown on cards that still have one; edit it into
+            // "Description" above and clear this to move over.
+            defineField({
+              name: 'description',
+              title: 'Description (old plain text)',
+              type: 'text',
+              rows: 3,
+              hidden: ({parent}) => !(parent as {description?: string} | undefined)?.description,
+            }),
+            defineField({
+              name: 'addImages',
+              title: 'Add images?',
+              type: 'boolean',
+              description: 'Show up to two logos or images underneath this column.',
+              initialValue: false,
+            }),
+            defineField({
+              name: 'images',
+              title: 'Images',
+              type: 'array',
+              of: [{type: 'imageWithAlt'}],
+              description: 'Up to two images, shown under this column.',
+              validation: (rule) => rule.max(2),
+              hidden: ({parent}) => !(parent as {addImages?: boolean} | undefined)?.addImages,
+            }),
+            defineField({
+              name: 'links',
+              title: 'Links',
+              type: 'array',
+              of: [{type: 'link'}],
+              description: 'Optional. Add as many links as you like; each shows under the description.',
+            }),
+            // Single button from before the Links list existed. Only shown on
+            // cards that still have one; re-add it under "Links" and remove it
+            // here to move over.
+            defineField({
+              name: 'action',
+              title: 'Button (old)',
+              type: 'action',
+              hidden: ({parent}) => !(parent as {action?: unknown} | undefined)?.action,
+            }),
           ],
           preview: {select: {title: 'title', media: 'markerImage'}},
         },

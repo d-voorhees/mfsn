@@ -1,9 +1,10 @@
 ---
 import { urlFor } from '../../lib/sanity';
+import { renderPortableText } from '../../lib/portableText';
 import { resolveHref, isExternal } from '../../lib/link';
 import { buttonClass } from '../../lib/buttonStyle';
 import { backgroundStyle, paddingClass } from '../../lib/sectionSettings';
-import type { FeatureGridBlock, FeatureGridMarkerIconKey } from '../../types/sanity';
+import type { FeatureGridBlock, FeatureGridItem, FeatureGridMarkerIconKey } from '../../types/sanity';
 
 interface Props {
   block: FeatureGridBlock;
@@ -25,6 +26,15 @@ const ICON_CLASS: Record<FeatureGridMarkerIconKey, string> = {
   coordination: 'ph-users-three',
   messaging: 'ph-chat-circle-text',
 };
+
+// A card's links: the Links list, plus the old single button on cards that
+// still have one. List links use the default button look; the old button
+// keeps the style it was saved with.
+function itemLinks(item: FeatureGridItem) {
+  const fromList = (item.links ?? []).map((link) => ({ link, style: undefined as string | undefined }));
+  const legacy = item.action ? [{ link: item.action.link, style: item.action.style }] : [];
+  return [...legacy, ...fromList];
+}
 
 const ROMAN_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'];
 
@@ -65,19 +75,24 @@ const colSpanClass =
               <div class="work-step-number">{String(index + 1).padStart(2, '0')}</div>
               <div>
                 <h3>{item.title}</h3>
-                {item.description && <p>{item.description}</p>}
+                {item.body?.length ? <Fragment set:html={renderPortableText(item.body)} /> : item.description && <p>{item.description}</p>}
               </div>
             </div>
           </div>
         ) : isPartnerStyle ? (
           <div class={`${colSpanClass} partner-col`}>
             <h3>{item.title}</h3>
-            {item.description && <p>{item.description}</p>}
-            {item.action && (
-              <a href={resolveHref(item.action.link)} class="partner-cta">
-                {item.action.link.label}
+            {item.body?.length ? <Fragment set:html={renderPortableText(item.body)} /> : item.description && <p>{item.description}</p>}
+            {itemLinks(item).map((entry) => (
+              <a
+                href={resolveHref(entry.link)}
+                class="partner-cta"
+                target={isExternal(entry.link) ? '_blank' : undefined}
+                rel={isExternal(entry.link) ? 'noopener' : undefined}
+              >
+                {entry.link.label}
               </a>
-            )}
+            ))}
           </div>
         ) : (
           <div class={colSpanClass}>
@@ -94,17 +109,24 @@ const colSpanClass =
                 </div>
               )}
               <h3>{item.title}</h3>
-              {item.description && <p>{item.description}</p>}
-              {item.action && (
+              {item.body?.length ? <Fragment set:html={renderPortableText(item.body)} /> : item.description && <p>{item.description}</p>}
+              {itemLinks(item).map((entry) => (
                 <a
-                  href={resolveHref(item.action.link)}
-                  class={buttonClass(item.action.style)}
-                  target={isExternal(item.action.link) ? '_blank' : undefined}
-                  rel={isExternal(item.action.link) ? 'noopener' : undefined}
+                  href={resolveHref(entry.link)}
+                  class={buttonClass(entry.style)}
+                  target={isExternal(entry.link) ? '_blank' : undefined}
+                  rel={isExternal(entry.link) ? 'noopener' : undefined}
                 >
-                  {item.action.link.label}
-                {isExternal(item.action.link) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
-              )}
+                  {entry.link.label}
+                {isExternal(entry.link) && <span class="visually-hidden"> (opens in a new tab)</span>}</a>
+              ))}
+              {item.addImages && item.images?.length ? (
+                <div class="d-flex flex-wrap align-items-center gap-3 mt-3">
+                  {item.images.slice(0, 2).map((image) => (
+                    <img src={urlFor(image).height(120).url()} alt={image.alt} loading="lazy" style="max-height: 60px; width: auto; max-width: 45%;" />
+                  ))}
+                </div>
+              ) : null}
             </div>
           </div>
         );

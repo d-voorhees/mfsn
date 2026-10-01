@@ -13,5 +13,6 @@ export function resolveHref(link?: LinkData): string {
 }
 
 export function isExternal(link?: LinkData): boolean {
+  if (link?.externalUrl?.startsWith('#') && !link.fileUrl) return false;
   return Boolean(link?.externalUrl || link?.fileUrl) && !link?.internalLink;
 }

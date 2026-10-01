@@ -14,6 +14,7 @@ export default defineType({
   name: 'sectionSettings',
   title: 'Section settings',
   type: 'object',
+  options: {collapsible: true, collapsed: true},
   fields: [
     defineField({
       name: 'background',

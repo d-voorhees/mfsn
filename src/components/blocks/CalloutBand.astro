@@ -8,8 +8,12 @@ interface Props {
 const { block } = Astro.props;
 ---
 
-<div class={`navigator-callout navigator-callout--${block.color}`}>
-  <span class="callout-label">{block.label}</span>
-  <strong>{block.statement}</strong>
-  {block.body && ` ${block.body}`}
-</div>
+<section class="callout-band-section">
+  <div class="container">
+    <div class={`navigator-callout navigator-callout--${block.color}`}>
+      <span class="callout-label">{block.label}</span>
+      <strong>{block.statement}</strong>
+      {block.body && ` ${block.body}`}
+    </div>
+  </div>
+</section>

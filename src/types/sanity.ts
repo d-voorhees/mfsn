@@ -182,7 +182,11 @@ export interface FeatureGridItem {
   markerIconKey?: FeatureGridMarkerIconKey
   markerImage?: SanityImage
   title: string
+  body?: PortableTextBlock[]
   description?: string
+  addImages?: boolean
+  images?: SanityImage[]
+  links?: LinkData[]
   action?: ActionData
 }
 

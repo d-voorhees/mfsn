@@ -97,6 +97,13 @@ const PAGE_BUILDER_PROJECTION = `
     _type == "featureGrid" => {
       "items": items[]{
         ...,
+        "body": ${BODY_PROJECTION},
+        "links": links[]{
+          label,
+          internalLink->{slug},
+          "fileUrl": file->file.asset->url,
+          externalUrl
+        },
         "action": action{..., ${RESOLVED_LINK('link')}}
       },
       ${RESOLVED_LINK('trailingLink')}

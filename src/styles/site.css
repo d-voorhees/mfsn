@@ -1152,6 +1152,18 @@ h2.matters-heading.pr-5 {
   background: var(--bullet-icon) center / contain no-repeat;
 }
 
+/* Callouts sit directly under the preceding section's content, so the
+   wrapping section drops the default 5em padding; the callout's own
+   margin-bottom supplies the spacing. */
+.callout-band-section {
+  padding: 0;
+}
+
+.callout-band-section:last-of-type,
+.callout-band-section:has(+ :not(.callout-band-section)) {
+  padding-bottom: 5em;
+}
+
 .navigator-callout {
   border: 1px solid var(--callout-color, var(--accent-gold));
   background: var(--callout-bg, #faf5ea);

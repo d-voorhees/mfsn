@@ -15,7 +15,7 @@ export default defineType({
     }),
     defineField({
       name: 'style',
-      title: 'Visual style',
+      title: 'Button visual style',
       type: 'string',
       options: {
         list: [

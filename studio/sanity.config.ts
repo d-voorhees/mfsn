@@ -1,7 +1,9 @@
 import {defineConfig} from 'sanity'
 import {structureTool} from 'sanity/structure'
 import {visionTool} from '@sanity/vision'
+import {media} from 'sanity-plugin-media'
 import {schemaTypes} from './schemaTypes'
+import {MediaLibraryShortcut} from './MediaLibraryShortcut'
 
 // siteSettings is a singleton: exactly one document should ever exist.
 // The desk structure below opens it directly (creating it on first visit
@@ -23,18 +25,22 @@ export default defineConfig({
         S.list()
           .title('Content')
           .items([
+            S.documentTypeListItem('page').title('Pages'),
+            S.documentTypeListItem('uploadedFile').title('Uploads (PDFs & documents)'),
+            S.documentTypeListItem('newsMention').title('News Mentions'),
+            S.listItem()
+              .title('Media Library (images)')
+              .id('mediaLibrary')
+              .child(S.component(MediaLibraryShortcut).title('Media Library')),
             S.listItem()
               .title('Site Settings')
               .id('siteSettings')
               .child(S.document().schemaType('siteSettings').documentId('siteSettings')),
-            S.divider(),
-            S.documentTypeListItem('uploadedFile').title('Uploads (PDFs & documents)'),
-            S.divider(),
-            ...S.documentTypeListItems().filter(
-              (listItem) => !SINGLETON_TYPES.has(listItem.getId() ?? '') && listItem.getId() !== 'uploadedFile',
-            ),
           ]),
     }),
+    // Adds a "Media" tool (browse/upload/tag all images) and a "Browse"
+    // option on every image field's asset picker.
+    media(),
     visionTool(),
   ],
 
