@@ -148,15 +148,6 @@ export default defineType({
               of: [{type: 'link'}],
               description: 'Optional. Add as many links as you like; each shows under the description.',
             }),
-            // Single button from before the Links list existed. Only shown on
-            // cards that still have one; re-add it under "Links" and remove it
-            // here to move over.
-            defineField({
-              name: 'action',
-              title: 'Button (old)',
-              type: 'action',
-              hidden: ({parent}) => !(parent as {action?: unknown} | undefined)?.action,
-            }),
           ],
           preview: {select: {title: 'title', media: 'markerImage'}},
         },
