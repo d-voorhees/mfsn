@@ -951,7 +951,7 @@ h2.matters-heading.pr-5 {
 }
 
 .partner-col a.partner-cta {
-  display: inline-block;
+  display: block;
   margin-top: 0.5rem;
   font-weight: 800;
   text-decoration: underline;
