@@ -143,6 +143,11 @@ const colSpanClass =
         );
       })}
     </div>
+    {block.bottomLine?.length ? (
+      <div class="feature-grid-bottom-line">
+        <Fragment set:html={renderPortableText(block.bottomLine)} />
+      </div>
+    ) : null}
     {block.trailingLink && (
       <div class="pillars-cta">
         <a

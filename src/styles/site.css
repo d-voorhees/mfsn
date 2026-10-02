@@ -2469,3 +2469,13 @@ main li a:not([class]),
   }
   .btn-cta:hover { transform: none; }
 }
+
+img.feature-item-image {
+  padding: 5px;
+  filter: grayscale(100%) brightness(0);
+}
+
+.feature-grid-bottom-line {
+  margin-top: 2rem;
+  text-align: center;
+}

@@ -95,6 +95,14 @@ const PAGE_BUILDER_PROJECTION = `
       }
     },
     _type == "featureGrid" => {
+      "bottomLine": bottomLine[]{
+        ...,
+        markDefs[]{
+          ...,
+          _type == "internalLink" => {"slug": page->slug.current},
+          _type == "fileLink" => {"url": upload->file.asset->url}
+        }
+      },
       "items": items[]{
         ...,
         "body": ${BODY_PROJECTION},

@@ -154,6 +154,25 @@ export default defineType({
       ],
     }),
     defineField({
+      name: 'addBottomLine',
+      title: 'Add a bottom line?',
+      type: 'boolean',
+      description: 'Tick to add a note underneath the columns.',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'bottomLine',
+      title: 'Bottom line',
+      type: 'array',
+      of: [bodyBlock],
+      description: 'Optional note shown underneath the columns.',
+      // Stays visible if text was already entered so nothing gets hidden by accident.
+      hidden: ({parent}) => {
+        const block = parent as {addBottomLine?: boolean; bottomLine?: unknown[]} | undefined
+        return !(block?.addBottomLine || block?.bottomLine?.length)
+      },
+    }),
+    defineField({
       name: 'trailingLink',
       title: 'Trailing link',
       type: 'link',

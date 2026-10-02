@@ -198,6 +198,8 @@ export interface FeatureGridBlock {
   columns: 'two' | 'three' | 'four'
   markerStyle: 'icon' | 'number' | 'numeral' | 'logoImage' | 'none'
   items: FeatureGridItem[]
+  addBottomLine?: boolean
+  bottomLine?: PortableTextBlock[]
   trailingLink?: LinkData
   settings?: SectionSettings
 }
