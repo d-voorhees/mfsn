@@ -145,7 +145,7 @@ const colSpanClass =
     </div>
     {block.bottomLine?.length ? (
       <div class="feature-grid-bottom-line">
-        <Fragment set:html={renderPortableText(block.bottomLine)} />
+        <Fragment set:html={renderPortableText(block.bottomLine).replace(/<\/p><p>/g, '<br>').replace(/<\/?p>/g, '')} />
       </div>
     ) : null}
     {block.trailingLink && (

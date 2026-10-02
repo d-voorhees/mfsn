@@ -2476,6 +2476,18 @@ img.feature-item-image {
 }
 
 .feature-grid-bottom-line {
-  margin-top: 2rem;
+  margin: 0;
+  padding: 0;
   text-align: center;
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+
+.feature-grid-bottom-line a {
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.partner-heading + .row {
+  padding-top: 0.5rem !important;
 }
