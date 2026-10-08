@@ -18,6 +18,13 @@ export default defineType({
       description: 'Where the Sign Up button goes (e.g. your Constant Contact signup page).',
       validation: (rule) => rule.uri({scheme: ['http', 'https', 'mailto']}),
     }),
+    defineField({
+      name: 'buttonOpenInNewTab',
+      title: 'Open in a new tab',
+      type: 'boolean',
+      description: 'Leave unchecked to open the link in the same tab.',
+      initialValue: false,
+    }),
   ],
   preview: {
     select: {heading: 'heading'},

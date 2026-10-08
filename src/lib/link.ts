@@ -12,7 +12,8 @@ export function resolveHref(link?: LinkData): string {
   return link.externalUrl ?? '#';
 }
 
+// Despite the name, this means "open in a new tab": it follows the editor's
+// "Open in a new tab" checkbox on the link, and defaults to the same tab.
 export function isExternal(link?: LinkData): boolean {
-  if (link?.externalUrl?.startsWith('#') && !link.fileUrl) return false;
-  return Boolean(link?.externalUrl || link?.fileUrl) && !link?.internalLink;
+  return link?.openInNewTab === true;
 }

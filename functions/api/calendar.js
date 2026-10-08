@@ -75,6 +75,11 @@ function parseIcalEvents(icsData) {
       case 'LOCATION':
         current.location = unescapeIcal(value).trim();
         break;
+      case 'DTEND': {
+        const parsed = parseIcalDate(value);
+        if (parsed) current.end = parsed.date;
+        break;
+      }
       case 'DTSTART': {
         const parsed = parseIcalDate(value);
         if (parsed) {
@@ -135,6 +140,7 @@ export async function onRequest() {
         start: allDay
           ? `${e.start.getFullYear()}-${String(e.start.getMonth() + 1).padStart(2, '0')}-${String(e.start.getDate()).padStart(2, '0')}`
           : e.start.toISOString(),
+        end: !allDay && e.end ? e.end.toISOString() : null,
         allDay,
       };
     });

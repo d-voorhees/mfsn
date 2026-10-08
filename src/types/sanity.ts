@@ -38,6 +38,7 @@ export interface LinkData {
   internalLink?: {slug: {current: string}}
   fileUrl?: string
   externalUrl?: string
+  openInNewTab?: boolean
 }
 
 export interface ActionData {
@@ -314,6 +315,7 @@ export interface NewsletterSignupBlock {
   description?: string
   buttonLabel?: string
   buttonUrl?: string
+  buttonOpenInNewTab?: boolean
 }
 
 export type PageBlock =

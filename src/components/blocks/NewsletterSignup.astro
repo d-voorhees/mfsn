@@ -13,7 +13,7 @@ const { block } = Astro.props;
   {block.description && <p>{block.description}</p>}
   {block.buttonUrl && (
     <div class="updates-signup-form">
-      <a class="btn-signup" href={block.buttonUrl}>{block.buttonLabel || 'Sign Up'}</a>
+      <a class="btn-signup" href={block.buttonUrl} target={block.buttonOpenInNewTab ? '_blank' : undefined} rel={block.buttonOpenInNewTab ? 'noopener' : undefined}>{block.buttonLabel || 'Sign Up'}</a>
     </div>
   )}
 </div>

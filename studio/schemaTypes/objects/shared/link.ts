@@ -73,6 +73,13 @@ export default defineType({
             : 'Enter a full URL (https://...), a mailto: or tel: link, or # for an on-page anchor.'
         }),
     }),
+    defineField({
+      name: 'openInNewTab',
+      title: 'Open in a new tab',
+      type: 'boolean',
+      description: 'Leave unchecked to open the link in the same tab.',
+      initialValue: false,
+    }),
   ],
   validation: (rule) =>
     rule.custom((value) => {

@@ -9,7 +9,8 @@ const LINK_PROJECTION = `
   label,
   internalLink->{slug},
   "fileUrl": file->file.asset->url,
-  externalUrl
+  externalUrl,
+  openInNewTab
 `;
 
 // Fetches the one siteSettings singleton: logo, primary navigation (with
@@ -49,7 +50,8 @@ const RESOLVED_LINK = (path: string) => `
     label,
     internalLink->{slug},
     "fileUrl": file->file.asset->url,
-    externalUrl
+    externalUrl,
+    openInNewTab
   }
 `;
 
@@ -85,7 +87,7 @@ const PAGE_BUILDER_PROJECTION = `
     _type == "textImageSection" => {
       "body": ${BODY_PROJECTION},
       "actions": actions[]{..., ${RESOLVED_LINK('link')}},
-      "linkList": linkList[]{label, internalLink->{slug}, "fileUrl": file->file.asset->url, externalUrl}
+      "linkList": linkList[]{label, internalLink->{slug}, "fileUrl": file->file.asset->url, externalUrl, openInNewTab}
     },
     _type == "twoColumnImageSection" => {
       "columns": columns[]{
@@ -110,7 +112,8 @@ const PAGE_BUILDER_PROJECTION = `
           label,
           internalLink->{slug},
           "fileUrl": file->file.asset->url,
-          externalUrl
+          externalUrl,
+          openInNewTab
         },
         "action": action{..., ${RESOLVED_LINK('link')}}
       },
@@ -121,7 +124,7 @@ const PAGE_BUILDER_PROJECTION = `
     },
     _type == "resourceSpotlight" => {
       "body": ${BODY_PROJECTION},
-      "resourceLinks": resourceLinks[]{label, internalLink->{slug}, "fileUrl": file->file.asset->url, externalUrl}
+      "resourceLinks": resourceLinks[]{label, internalLink->{slug}, "fileUrl": file->file.asset->url, externalUrl, openInNewTab}
     },
     _type == "newsGrid" => {
       "mentions": mentions[]->{_id, headline, outletLogo, excerpt, byline, citation, url, linkLabel},

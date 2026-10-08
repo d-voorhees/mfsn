@@ -30,7 +30,10 @@
 
     var monthFmt = new Intl.DateTimeFormat('en-US', { month: 'short' });
     var dateFmt = new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
-    var timeFmt = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit' });
+    // Pinned to the network's local zone so every visitor sees the same meeting time.
+    var tz = 'America/New_York';
+    var timeFmt = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', timeZone: tz });
+    var tzFmt = new Intl.DateTimeFormat('en-US', { timeZoneName: 'short', timeZone: tz });
 
     events.forEach(function (event) {
       var start = parseEventDate(event);
@@ -42,10 +45,10 @@
       dateCol.className = 'agenda-widget__date';
       var month = document.createElement('span');
       month.className = 'agenda-widget__month';
-      month.textContent = monthFmt.format(start).toUpperCase();
+      month.textContent = (event.allDay ? monthFmt.format(start) : new Intl.DateTimeFormat('en-US', { month: 'short', timeZone: tz }).format(start)).toUpperCase();
       var day = document.createElement('span');
       day.className = 'agenda-widget__day';
-      day.textContent = String(start.getDate());
+      day.textContent = String(event.allDay ? start.getDate() : Number(new Intl.DateTimeFormat('en-US', { day: 'numeric', timeZone: tz }).format(start)));
       dateCol.appendChild(month);
       dateCol.appendChild(day);
 
@@ -56,12 +59,32 @@
       title.textContent = event.summary || 'Untitled event';
       var meta = document.createElement('p');
       meta.className = 'agenda-widget__meta';
-      var metaText = dateFmt.format(start);
-      if (!event.allDay) metaText += ' at ' + timeFmt.format(start);
-      if (event.location) metaText += ' · ' + event.location;
-      meta.textContent = metaText;
+      var dateText = event.allDay
+        ? dateFmt.format(start)
+        : new Intl.DateTimeFormat('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: tz }).format(start);
+      meta.textContent = dateText;
       body.appendChild(title);
       body.appendChild(meta);
+
+      var when = document.createElement('p');
+      when.className = 'agenda-widget__meta agenda-widget__time';
+      if (event.allDay) {
+        when.textContent = 'Time: All day';
+      } else {
+        var timeText = timeFmt.format(start);
+        if (event.end) timeText += ' \u2013 ' + timeFmt.format(new Date(event.end));
+        var zoneParts = tzFmt.formatToParts(start).filter(function (p) { return p.type === 'timeZoneName'; });
+        if (zoneParts.length) timeText += ' ' + zoneParts[0].value;
+        when.textContent = 'Time: ' + timeText;
+      }
+      body.appendChild(when);
+
+      if (event.location) {
+        var where = document.createElement('p');
+        where.className = 'agenda-widget__meta agenda-widget__location';
+        where.textContent = 'Location: ' + event.location;
+        body.appendChild(where);
+      }
 
       item.appendChild(dateCol);
       item.appendChild(body);
